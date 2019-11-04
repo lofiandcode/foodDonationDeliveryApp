@@ -4,5 +4,5 @@ class Driver < ApplicationRecord
     has_many :driver_food_banks
     has_many :food_banks, through: :driver_food_banks, dependent: :destroy
     serialize :areas
-    serialize :hours
+    serialize :hours 
 end
