@@ -10,66 +10,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_30_180300) do
+ActiveRecord::Schema.define(version: 2019_11_05_001444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "donor_drivers", force: :cascade do |t|
-    t.bigint "donor_id", null: false
-    t.bigint "driver_id", null: false
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.string "type"
+    t.float "quantity"
+    t.string "units"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["donor_id"], name: "index_donor_drivers_on_donor_id"
-    t.index ["driver_id"], name: "index_donor_drivers_on_driver_id"
   end
 
-  create_table "donors", force: :cascade do |t|
+  create_table "locations", force: :cascade do |t|
     t.string "name"
-    t.text "about"
     t.string "address"
-    t.string "phoneNum"
-    t.text "donations"
-    t.text "accommodations"
-    t.text "hours"
+    t.float "lat"
+    t.float "lng"
+    t.float "milesFrom"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "driver_food_banks", force: :cascade do |t|
-    t.bigint "driver_id", null: false
-    t.bigint "food_bank_id", null: false
+  create_table "user_items", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["driver_id"], name: "index_driver_food_banks_on_driver_id"
-    t.index ["food_bank_id"], name: "index_driver_food_banks_on_food_bank_id"
+    t.index ["item_id"], name: "index_user_items_on_item_id"
+    t.index ["user_id"], name: "index_user_items_on_user_id"
   end
 
-  create_table "drivers", force: :cascade do |t|
+  create_table "user_locations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "location_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["location_id"], name: "index_user_locations_on_location_id"
+    t.index ["user_id"], name: "index_user_locations_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
     t.string "name"
-    t.text "about"
+    t.string "username"
+    t.string "password"
+    t.string "role"
     t.string "phoneNum"
-    t.text "areas"
-    t.text "accommodations"
-    t.text "hours"
+    t.text "about"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "food_banks", force: :cascade do |t|
-    t.string "name"
-    t.text "about"
-    t.string "address"
-    t.string "phoneNum"
-    t.text "donationsNeeded"
-    t.text "accommodations"
-    t.text "hours"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  add_foreign_key "donor_drivers", "donors"
-  add_foreign_key "donor_drivers", "drivers"
-  add_foreign_key "driver_food_banks", "drivers"
-  add_foreign_key "driver_food_banks", "food_banks"
+  add_foreign_key "user_items", "items"
+  add_foreign_key "user_items", "users"
+  add_foreign_key "user_locations", "locations"
+  add_foreign_key "user_locations", "users"
 end
