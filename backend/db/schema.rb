@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2019_11_05_001444) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.string "type"
+    t.string "category"
     t.float "quantity"
     t.string "units"
     t.datetime "created_at", precision: 6, null: false
