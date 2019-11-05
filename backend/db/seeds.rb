@@ -13,14 +13,17 @@
 Dir[File.expand_path("db/seeds/**/*.rb")].each { |file| require file }
 
 
-donors = Donor.all;
-food_banks = FoodBank.all;
-drivers = Driver.all;
+users = User.all;
+items = Item.all;
+locations = Location.all;
 
-DonorDriver.create(donor_id: donors[0].id, driver_id: drivers[0].id);
-DonorDriver.create(donor_id: donors[0].id, driver_id: drivers[1].id);
-DriverFoodBank.create(driver_id: drivers[0].id, food_bank_id: food_banks[0].id);
-DriverFoodBank.create(driver_id: drivers[0].id, food_bank_id: food_banks[1].id);
-DriverFoodBank.create(driver_id: drivers[1].id, food_bank_id: food_banks[0].id);
-DriverFoodBank.create(driver_id: drivers[1].id, food_bank_id: food_banks[1].id);
+i = 0;
+while i < users.length && i < locations.length  do
+    UserLocation.create(user_id: users[i].id, location_id: locations[i].id);
+    i += 1;
+end
+
+UserItem.create(user_id: users[0].id, item_id: items[0].id);
+UserItem.create(user_id: users[3].id, item_id: items[0].id);
+UserItem.create(user_id: users[4].id, item_id: items[1].id);
 puts 'Data seeded!';
