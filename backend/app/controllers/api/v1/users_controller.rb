@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
     def index
         @users = User.all
         render :json => @users
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
     def create
         # puts user_params
-        @user = User.new(name: 'Post Test')
+        @user = User.new(user_params)
         @user.save
         render :json => @user
     end
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
     def update
         @user = User.find(params[:id])
-        @user.update(role: 'Patch Test')
+        @user.update(user_params)
         render :json => @user
     end
 

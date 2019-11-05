@@ -4,7 +4,7 @@ User.create({
     password: '1234',
     role: 'donor',
     phoneNum: '(206) 282-0988',
-    about: 'I like fish.'
+    about: 'We like fish.'
 })
 
 User.create({

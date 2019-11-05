@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import DonorContainer from './containers/donorContainer';
+import UserContainer from './containers/UserContainer';
 
-function App() {
-  return (
-    <div className="App">
-      <DonorContainer />
-    </div>
-  );
+class App extends Component {
+  render(){
+    return (
+      <div className="App">
+        <UserContainer />
+      </div>
+    );
+  }
 }
 
 export default App;
