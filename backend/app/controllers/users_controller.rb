@@ -14,8 +14,8 @@ class UsersController < ApplicationController
     end
 
     def create
-        puts user_params
-        @user = User.new(user_params)
+        # puts user_params
+        @user = User.new(name: 'Post Test')
         @user.save
         render :json => @user
     end
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
     def update
         @user = User.find(params[:id])
-        @user.update(user_params)
+        @user.update(role: 'Patch Test')
         render :json => @user
     end
 

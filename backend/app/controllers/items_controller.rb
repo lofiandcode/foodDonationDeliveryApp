@@ -14,8 +14,8 @@ class ItemsController < ApplicationController
     end
 
     def create
-        puts item_params
-        @item = Item.new(item_params)
+        # puts item_params
+        @item = Item.new(name: 'Post Test')
         @item.save
         render :json => @item
     end
@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
 
     def update
         @item = Item.find(params[:id])
-        @item.update(item_params)
+        @item.update(category: 'Patch Test')
         render :json => @item
     end
 

@@ -14,8 +14,8 @@ class LocationsController < ApplicationController
     end
 
     def create
-        puts location_params
-        @location = Location.new(location_params)
+        # puts location_params
+        @location = Location.new(name: 'Post Test')
         @location.save
         render :json => @location
     end
@@ -26,7 +26,7 @@ class LocationsController < ApplicationController
 
     def update
         @location = Location.find(params[:id])
-        @location.update(location_params)
+        @location.update(address: 'Patch Test')
         render :json => @location
     end
 
