@@ -23,24 +23,20 @@ class UserContainer extends Component {
         }
     }
 
+    componentDidMount() {
+        this.getUsers()
+    }
+
     getUsers = () => {
         fetch("http://localhost:3000/api/v1/users")
         .then(resp => resp.json())
         .then(data => {
             this.setState({
                 users: data,
-            }, () => this.setCurrentUser());
+                currentUser: data[0]
+            }, () => console.log("After getUsers() state = ",this.state));
         })
         .catch(err=>console.log(err))
-    }
-
-    componentDidMount() {
-        this.getUsers()
-    }
-
-    setCurrentUser() {
-        console.log('IN setCurrentUser')
-        this.setState({currentUser: this.state.users[0]}, () => console.log(this.state))
     }
 
     handleFormChange = (event) => {
@@ -62,12 +58,13 @@ class UserContainer extends Component {
         event.persist();
         this.setState({
             newDonation: event.target.value
-        }, () => console.log("newDonation = ", this.state.newDonation))
+        })
     }
+    // , () => console.log("newDonation = ", this.state.newDonation)
 
     handleDonationSubmit = (event) => {
         event.preventDefault();
-        console.log('About to POST newDonation')
+        // console.log('About to POST newDonation')
         fetch(`http://localhost:3000/api/v1/items`, {
             method: "POST",
             headers: {
@@ -99,7 +96,7 @@ class UserContainer extends Component {
                 }
             })
         })
-        .then(this.clearForm())
+        .then(() => this.clearForm())
         .catch(err => alert(err.message));
         // .then(response => response.json())
         // .then(json => console.log('join post = ', json))
@@ -107,6 +104,8 @@ class UserContainer extends Component {
     }
 
     clearForm = () => {
+        // console.log('In ClearForm user_item = ', user_item)
+        console.log('clearForm users = ', this.state.users);
         this.setState({
             testDriver: {
             name: 'John Doe',
@@ -123,9 +122,15 @@ class UserContainer extends Component {
             testItem: {
             name: this.state.newDonation
             }
-        })
-        this.getUsers();
+        }, () => this.resetUsers())
+        
     }
+
+    resetUsers = () => {
+        this.getUsers();
+        this.setState({newDonation: ''})
+    }
+
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -149,7 +154,7 @@ class UserContainer extends Component {
 
     render() {
         console.log("%crender fires", "color:red;")
-        console.log(this.state.currentUser)
+        console.log('currentUser at render = ', this.state.currentUser)
         return (
             <Router>
                 <NavBar />

@@ -1,10 +1,10 @@
 import React from 'react'
 
 const Contact = (props) => {
-    console.log("Contact props = ", props)
+    // console.log("Contact props = ", props)
     if (props.user) {
         if (props.user.locations) {
-            console.log(props.user.locations[0].address)
+            // console.log(props.user.locations[0].address)
             return (
                 <div>
                     <h4>Contact:</h4>
