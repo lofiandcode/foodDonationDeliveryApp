@@ -5,6 +5,7 @@ import About from '../components/About';
 import DonationsContainer from './DonationsContainer';
 import Contact from '../components/Contact';
 import UserEditContainer from './UserEditContainer';
+import MatchContainer from './MatchContainer';
 
 class UserContainer extends Component {
 
@@ -13,7 +14,18 @@ class UserContainer extends Component {
         this.state = {
             users: [],
             currentUser: {},
-            newDonation: ''
+            newDonation: '',
+            testDonor: {
+                name: 'Icicle Seafoods',
+                address: "4019 21st Ave W, Seattle, WA 98199"
+            },
+            testFoodBank: {
+                name: 'Ballard Food Bank',
+                address: '5130 Leary Ave NW, Seattle, WA 98107'
+            },
+            testItem: {
+                name: "Bread"
+            }
         }
     }
 
@@ -125,6 +137,11 @@ class UserContainer extends Component {
                             <About user={this.state.currentUser}/>
                             <DonationsContainer user={this.state.currentUser} handleDonationChange={this.handleDonationChange} newDonation={this.state.newDonation} handleDonationSubmit={this.handleDonationSubmit}/>
                             <Contact user={this.state.currentUser}/>
+                            <MatchContainer 
+                                donor={this.state.testDonor}
+                                food_bank={this.state.testFoodBank} 
+                                items={this.state.testItem}
+                            />
                         </div>
                     )
                 }}
