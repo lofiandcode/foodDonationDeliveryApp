@@ -6,6 +6,7 @@ import DonationsContainer from './DonationsContainer';
 import Contact from '../components/Contact';
 import UserEditContainer from './UserEditContainer';
 import MatchContainer from './MatchContainer';
+import NavBar from './NavBar';
 
 class UserContainer extends Component {
 
@@ -22,7 +23,7 @@ class UserContainer extends Component {
         }
     }
 
-    componentDidMount() {
+    getUsers = () => {
         fetch("http://localhost:3000/api/v1/users")
         .then(resp => resp.json())
         .then(data => {
@@ -31,6 +32,10 @@ class UserContainer extends Component {
             }, () => this.setCurrentUser());
         })
         .catch(err=>console.log(err))
+    }
+
+    componentDidMount() {
+        this.getUsers()
     }
 
     setCurrentUser() {
@@ -94,10 +99,10 @@ class UserContainer extends Component {
                 }
             })
         })
-        .then(response => response.json())
         .then(this.clearForm())
-        // .then(json => console.log('join post = ', json))
         .catch(err => alert(err.message));
+        // .then(response => response.json())
+        // .then(json => console.log('join post = ', json))
 
     }
 
@@ -119,8 +124,7 @@ class UserContainer extends Component {
             name: this.state.newDonation
             }
         })
-        this.setState({newDonation: ""})
-        this.setState({currentUser: {}}, () => this.setCurrentUser())
+        this.getUsers();
     }
 
     handleSubmit = (event) => {
@@ -144,9 +148,11 @@ class UserContainer extends Component {
     }
 
     render() {
-        console.log("render fires")
+        console.log("%crender fires", "color:red;")
+        console.log(this.state.currentUser)
         return (
             <Router>
+                <NavBar />
                 <Route
                 exact path="/profile"
                 render={() => {
