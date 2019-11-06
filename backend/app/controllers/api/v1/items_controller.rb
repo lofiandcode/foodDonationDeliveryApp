@@ -1,4 +1,4 @@
-class ItemsController < ApplicationController
+class Api::V1::ItemsController < ApplicationController
     def index
         @items = Item.all;
         render :json => @items;
@@ -15,7 +15,7 @@ class ItemsController < ApplicationController
 
     def create
         # puts item_params
-        @item = Item.new(name: 'Post Test')
+        @item = Item.new(item_params)
         @item.save
         render :json => @item
     end
@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
 
     def update
         @item = Item.find(params[:id])
-        @item.update(category: 'Patch Test')
+        @item.update(item_params)
         render :json => @item
     end
 
