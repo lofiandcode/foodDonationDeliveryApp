@@ -69,12 +69,14 @@ class UserContainer extends Component {
             })
         })
         .then(response => response.json())
-        .then(json => joinItemAndCurrentUser(json))
-        .catch(err => alert(err.message));
+        .then(json => this.joinItemAndCurrentUser(json))
+        // .catch(err => alert(err.message));
     }
 
     joinItemAndCurrentUser = (item) => {
-        fetch(`http://localhost:3000/api/v1/items`, {
+        console.log('item = ', item)
+        // console.log('item.id = ', item.id)
+        fetch('http://localhost:3000/api/v1/user_items', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +90,7 @@ class UserContainer extends Component {
             })
         })
         .then(response => response.json())
-        .then(json => console.log("Join Post response =", json))
+        .then(json => console.log('join post = ', json))
     }
 
     handleSubmit = (event) => {

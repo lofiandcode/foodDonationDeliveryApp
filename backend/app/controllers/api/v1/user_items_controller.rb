@@ -1,26 +1,28 @@
 class Api::V1::UserItemsController < ApplicationController
     def index
-        @items = Item.all;
-        render :json => @items;
+        @user_items = UserItem.all;
+        render :json => @user_items;
     end
 
     def show
-        @item = Item.find(params[:id])
-        render :json => @item
+        @user_item = UserItem.find(params[:id])
+        render :json => @user_item
     end
 
     def new
-        @item = Item.new
+        @user_item = UserItem.new
     end
 
     def create
-        # puts item_params
-        @item = Item.new(item_params)
-        @item.save
-        render :json => @item
+        # puts '***********************************'
+        # puts 'user_item_params = ' + user_item_params
+        # puts '***********************************'
+        @user_item = UserItem.new(user_item_params)
+        @user_item.save
+        render :json => @user_item
     end
 
-    def item_params
-        params.require(:item).permit(:id, :user_id, :item_id)
+    def user_item_params
+        params.require(:user_item).permit(:id, :user_id, :item_id)
     end
 end
