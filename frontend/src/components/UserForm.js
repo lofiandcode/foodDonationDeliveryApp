@@ -35,13 +35,6 @@ class UserForm extends Component {
                             onChange={(e) => this.props.handleFormChange(e)}
                             value={this.props.user.phoneNum}
                         /><br/>
-                        <label>Donation:</label>
-                        <input
-                            type="text"
-                            name='donation'
-                            onChange={(e) => this.props.handleDonationChange(e)}
-                            value={this.props.user.items[0].name}
-                        /><br/>
                         <button type='submit' onSubmit={ () => this.handleSubmit()}>Submit</button>
                         </form>
                     </div>
