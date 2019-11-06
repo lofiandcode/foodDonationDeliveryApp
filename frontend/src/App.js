@@ -6,9 +6,9 @@ import UserContainer from './containers/UserContainer';
 class App extends Component {
   render(){
     return (
-      <div className="App">
-        <UserContainer />
-      </div>
+     <div>
+       <UserContainer />
+     </div>
     );
   }
 }
