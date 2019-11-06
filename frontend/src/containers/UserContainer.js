@@ -5,6 +5,7 @@ import About from '../components/About';
 import DonationsContainer from './DonationsContainer';
 import Contact from '../components/Contact';
 import UserEditContainer from './UserEditContainer';
+import MatchContainer from './MatchContainer';
 
 class UserContainer extends Component {
 
@@ -13,7 +14,11 @@ class UserContainer extends Component {
         this.state = {
             users: [],
             currentUser: {},
-            newDonation: ''
+            newDonation: '',
+            testDriver: {},
+            testDonor: {},
+            testFoodBank: {},
+            testItem: {}
         }
     }
 
@@ -30,7 +35,7 @@ class UserContainer extends Component {
 
     setCurrentUser() {
         console.log('IN setCurrentUser')
-        this.setState({currentUser: this.state.users[3]}, () => console.log(this.state))
+        this.setState({currentUser: this.state.users[0]}, () => console.log(this.state))
     }
 
     handleFormChange = (event) => {
@@ -43,8 +48,8 @@ class UserContainer extends Component {
                 ...this.state.currentUser,
                 [event.target.name]: event.target.value
             }
-        }, () => console.log(this.state.currentUser[event.target.name]))
-        
+        })
+        // , () => console.log(this.state.currentUser[event.target.name])
     }
 
     handleDonationChange = (event) => {
@@ -69,12 +74,14 @@ class UserContainer extends Component {
             })
         })
         .then(response => response.json())
-        .then(json => joinItemAndCurrentUser(json))
+        .then(json => this.joinItemAndCurrentUser(json))
         .catch(err => alert(err.message));
     }
 
     joinItemAndCurrentUser = (item) => {
-        fetch(`http://localhost:3000/api/v1/items`, {
+        // console.log('item = ', item)
+        // console.log('item.id = ', item.id)
+        fetch('http://localhost:3000/api/v1/user_items', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +95,32 @@ class UserContainer extends Component {
             })
         })
         .then(response => response.json())
-        .then(json => console.log("Join Post response =", json))
+        .then(this.clearForm())
+        // .then(json => console.log('join post = ', json))
+        .catch(err => alert(err.message));
+
+    }
+
+    clearForm = () => {
+        this.setState({
+            testDriver: {
+            name: 'John Doe',
+            phoneNum: '(206) 555-5555'
+            },
+            testDonor: {
+            name: 'Icicle Seafoods',
+            address: "4019 21st Ave W, Seattle, WA 98199"
+            },
+            testFoodBank: {
+            name: 'Ballard Food Bank',
+            address: '5130 Leary Ave NW, Seattle, WA 98107'
+            },
+            testItem: {
+            name: this.state.newDonation
+            }
+        })
+        this.setState({newDonation: ""})
+        this.setState({currentUser: {}}, () => this.setCurrentUser())
     }
 
     handleSubmit = (event) => {
@@ -108,10 +140,11 @@ class UserContainer extends Component {
         })
         .then(response => response.json())
         .then(json => console.log(json))
-        // .catch(err => alert(err.message));
+        .catch(err => alert(err.message));
     }
 
     render() {
+        console.log("render fires")
         return (
             <Router>
                 <Route
@@ -121,8 +154,19 @@ class UserContainer extends Component {
                         <div>
                             <User user={this.state.currentUser}/>
                             <About user={this.state.currentUser}/>
-                            <DonationsContainer user={this.state.currentUser} handleDonationChange={this.handleDonationChange} newDonation={this.state.newDonation} handleDonationSubmit={this.handleDonationSubmit}/>
+                            <DonationsContainer 
+                                user={this.state.currentUser} 
+                                handleDonationChange={this.handleDonationChange} 
+                                newDonation={this.state.newDonation} 
+                                handleDonationSubmit={this.handleDonationSubmit}
+                            />
                             <Contact user={this.state.currentUser}/>
+                            <MatchContainer 
+                                driver={this.state.testDriver}
+                                donor={this.state.testDonor}
+                                food_bank={this.state.testFoodBank} 
+                                items={this.state.testItem}
+                            />
                         </div>
                     )
                 }}
