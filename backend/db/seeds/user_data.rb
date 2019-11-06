@@ -1,10 +1,12 @@
+require 'faker'
+
 User.create({
     name: 'Icicle Seafoods',
     username: 'Icicle Seafoods',
     password: '1234',
     role: 'donor',
     phoneNum: '(206) 282-0988',
-    about: 'We like fish.'
+    about: Faker::Lorem.paragraph(sentence_count: 45)
 })
 
 User.create({
