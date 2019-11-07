@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import User from '../components/User';
 import About from '../components/About';
-import DonationsContainer from './DonationsContainer';
+import DonationsContainer from '../containers/DonationsContainer';
 import Contact from '../components/Contact';
-import UserEditContainer from './UserEditContainer';
-import MatchContainer from './MatchContainer';
-import NavBar from './NavBar';
+import UserEditView from './UserEditView';
+import MatchContainer from '../containers/MatchContainer';
+import NavBar from '../containers/NavBar';
+import LoginView from './LoginView';
 
-class UserContainer extends Component {
+class UserView extends Component {
 
     constructor() {
         super();
@@ -24,7 +25,7 @@ class UserContainer extends Component {
     }
 
     componentDidMount() {
-        this.getUsers()
+        this.getUsers();
     }
 
     getUsers = () => {
@@ -32,9 +33,8 @@ class UserContainer extends Component {
         .then(resp => resp.json())
         .then(data => {
             this.setState({
-                users: data,
-                currentUser: data[0]
-            }, () => console.log("After getUsers() state = ",this.state));
+                users: data
+            });
         })
         .catch(err=>console.log(err))
     }
@@ -127,10 +127,41 @@ class UserContainer extends Component {
     }
 
     resetUsers = () => {
+        console.log('IN resetUsers()')
         this.getUsers();
+        this.setCurrentUser(this.state.currentUser.username, this.state.currentUser.password)
         this.setState({newDonation: ''})
     }
 
+    handleLoginSubmit = (loginData) => {
+        console.log("IN handleLoginSubmit")
+        console.log('Username/Password = ', loginData)
+        this.setCurrentUser(loginData.username, loginData.password)
+    }
+
+    setCurrentUser = (username, password) => {
+        console.log('IN setCurrentUser()')
+        const loginUser = this.state.users.filter ( user => {
+            // console.log('***********************************')
+            // console.log('username = ', username)
+            // console.log('password = ', password)
+            // console.log('user.username = ', user.username)
+            // console.log('user.password = ', user.password)
+            // console.log("user.username === username && user.password === password is ", user.username === username && user.password === password)
+            // console.log('***********************************')
+            if (user.username === username && user.password === password) {
+                console.log('returned true')
+                 return true;
+            } else {
+                console.log('returned false')
+                 return false;
+            }
+         })
+         console.log('ABOUT TO SET CURRENTUSER IN STATE')
+         this.setState({currentUser: loginUser[0]}, () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser))
+    }
+
+//   this.props.history.push('/moneyform');
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -159,32 +190,41 @@ class UserContainer extends Component {
             <Router>
                 <NavBar />
                 <Route
-                exact path="/profile"
-                render={() => {
-                    return (
-                        <div>
-                            <User user={this.state.currentUser}/>
-                            <About user={this.state.currentUser}/>
-                            <DonationsContainer 
-                                user={this.state.currentUser} 
-                                handleDonationChange={this.handleDonationChange} 
-                                newDonation={this.state.newDonation} 
-                                handleDonationSubmit={this.handleDonationSubmit}
-                            />
-                            <Contact user={this.state.currentUser}/>
-                            <MatchContainer 
-                                driver={this.state.testDriver}
-                                donor={this.state.testDonor}
-                                food_bank={this.state.testFoodBank} 
-                                items={this.state.testItem}
-                            />
-                        </div>
-                    )
-                }}
+                    exact path='/'
+                    render={() => 
+                        <LoginView 
+                        handleLoginSubmit={this.handleLoginSubmit}
+                        />
+                    }
+                />
+                <Route
+                    exact path="/profile"
+                    render={() => {
+                        console.log("%cProfile render fires", "color:RED;")
+                        return (
+                            <div>
+                                <User user={this.state.currentUser}/>
+                                <About user={this.state.currentUser}/>
+                                <DonationsContainer 
+                                    user={this.state.currentUser} 
+                                    handleDonationChange={this.handleDonationChange} 
+                                    newDonation={this.state.newDonation} 
+                                    handleDonationSubmit={this.handleDonationSubmit}
+                                />
+                                <Contact user={this.state.currentUser}/>
+                                <MatchContainer 
+                                    driver={this.state.testDriver}
+                                    donor={this.state.testDonor}
+                                    food_bank={this.state.testFoodBank} 
+                                    items={this.state.testItem}
+                                />
+                            </div>
+                        )
+                    }}
                 />
                 <Route
                     exact path="/profile/edit"
-                    render={() => <UserEditContainer user={this.state.currentUser} handleFormChange={this.handleFormChange} handleSubmit={this.handleSubmit}/>}
+                    render={() => <UserEditView user={this.state.currentUser} handleFormChange={this.handleFormChange} handleSubmit={this.handleSubmit}/>}
                     />
             </Router>
         );
@@ -192,4 +232,4 @@ class UserContainer extends Component {
 
 }
 
-export default UserContainer;
+export default UserView;
