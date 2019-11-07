@@ -3,7 +3,7 @@ import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 
 export default class NavBar extends Component {
-  state = { activeItem: 'home' }
+  state = { activeItem: 'logout' }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 

@@ -157,7 +157,7 @@ class UserView extends Component {
                  return false;
             }
          })
-         console.log('ABOUT TO SET CURRENTUSER IN STATE')
+        //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
          this.setState({currentUser: loginUser[0]}, () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser))
     }
 
@@ -184,8 +184,8 @@ class UserView extends Component {
     }
 
     render() {
-        console.log("%crender fires", "color:red;")
-        console.log('currentUser at render = ', this.state.currentUser)
+        // console.log("%crender fires", "color:red;")
+        // console.log('currentUser at render = ', this.state.currentUser)
         return (
             <Router>
                 <NavBar />
@@ -200,7 +200,7 @@ class UserView extends Component {
                 <Route
                     exact path="/profile"
                     render={() => {
-                        console.log("%cProfile render fires", "color:RED;")
+                        // console.log("%cProfile render fires", "color:RED;")
                         return (
                             <div>
                                 <User user={this.state.currentUser}/>
