@@ -1,27 +1,30 @@
 import React, { Component } from 'react'
 import { Form } from 'semantic-ui-react'
+// import { Link } from 'react-router-dom';
 
 class LoginForm extends Component {
 
   render() {
-    const { username, password, handleSubmit } = this.props
+    const { username, password, handleLoginChange, handleLoginSubmit } = this.props
 
     return (
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleLoginSubmit}>
         <Form.Group>
           <Form.Input
             placeholder='Username'
-            name='Username'
+            name='username'
             value={username}
-            onChange={this.handleChange}
+            onChange={handleLoginChange}
           />
           <Form.Input
             placeholder='Password'
-            name='Password'
+            name='password'
             value={password}
-            onChange={this.handleChange}
+            onChange={handleLoginChange}
           />
-          <Form.Button content='Submit' />
+          <Form.Button 
+            content='Submit'
+          />
         </Form.Group>
       </Form>
     )

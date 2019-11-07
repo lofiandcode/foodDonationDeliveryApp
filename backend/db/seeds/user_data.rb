@@ -10,8 +10,8 @@ User.create({
 })
 
 User.create({
-    name: 'Knut Knutson',
-    username: 'Knut Knutson',
+    name: 'Knut Knutsen',
+    username: 'Knut Knutsen',
     password: '1234',
     role: 'driver',
     phoneNum: '(206) 555-5555',

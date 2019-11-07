@@ -33,9 +33,8 @@ class UserView extends Component {
         .then(resp => resp.json())
         .then(data => {
             this.setState({
-                users: data,
-                currentUser: data[0]
-            }, () => console.log("After getUsers() state = ",this.state));
+                users: data
+            });
         })
         .catch(err=>console.log(err))
     }
@@ -128,13 +127,41 @@ class UserView extends Component {
     }
 
     resetUsers = () => {
+        console.log('IN resetUsers()')
         this.getUsers();
+        this.setCurrentUser(this.state.currentUser.username, this.state.currentUser.password)
         this.setState({newDonation: ''})
     }
 
-    handleLoginSubmit = () => {
-        console.log("Login submit")
+    handleLoginSubmit = (loginData) => {
+        console.log("IN handleLoginSubmit")
+        console.log('Username/Password = ', loginData)
+        this.setCurrentUser(loginData.username, loginData.password)
     }
+
+    setCurrentUser = (username, password) => {
+        console.log('IN setCurrentUser()')
+        const loginUser = this.state.users.filter ( user => {
+            // console.log('***********************************')
+            // console.log('username = ', username)
+            // console.log('password = ', password)
+            // console.log('user.username = ', user.username)
+            // console.log('user.password = ', user.password)
+            // console.log("user.username === username && user.password === password is ", user.username === username && user.password === password)
+            // console.log('***********************************')
+            if (user.username === username && user.password === password) {
+                console.log('returned true')
+                 return true;
+            } else {
+                console.log('returned false')
+                 return false;
+            }
+         })
+         console.log('ABOUT TO SET CURRENTUSER IN STATE')
+         this.setState({currentUser: loginUser[0]}, () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser))
+    }
+
+//   this.props.history.push('/moneyform');
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -173,6 +200,7 @@ class UserView extends Component {
                 <Route
                     exact path="/profile"
                     render={() => {
+                        console.log("%cProfile render fires", "color:RED;")
                         return (
                             <div>
                                 <User user={this.state.currentUser}/>
