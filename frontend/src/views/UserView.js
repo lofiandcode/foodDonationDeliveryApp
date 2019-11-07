@@ -25,7 +25,7 @@ class UserView extends Component {
     }
 
     componentDidMount() {
-        this.getUsers()
+        this.getUsers();
     }
 
     getUsers = () => {
@@ -132,6 +132,9 @@ class UserView extends Component {
         this.setState({newDonation: ''})
     }
 
+    handleLoginSubmit = () => {
+        console.log("Login submit")
+    }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -161,7 +164,11 @@ class UserView extends Component {
                 <NavBar />
                 <Route
                     exact path='/'
-                    render={() => <LoginView />}
+                    render={() => 
+                        <LoginView 
+                        handleLoginSubmit={this.handleLoginSubmit}
+                        />
+                    }
                 />
                 <Route
                     exact path="/profile"

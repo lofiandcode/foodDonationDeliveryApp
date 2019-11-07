@@ -2,17 +2,12 @@ import React, { Component } from 'react'
 import { Form } from 'semantic-ui-react'
 
 class LoginForm extends Component {
-  state = {}
-
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-  handleSubmit = () => this.setState({ email: '', name: '' })
 
   render() {
-    const { username, password } = this.state
+    const { username, password, handleSubmit } = this.props
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Input
             placeholder='Username'
