@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserForm from '../components/UserForm'
 
-class UserEditContainer extends Component {
+class UserEditView extends Component {
 
     render() {
         return (
@@ -9,8 +9,8 @@ class UserEditContainer extends Component {
               <UserForm user={this.props.user} handleFormChange={this.props.handleFormChange} handleSubmit={this.handleSubmit}/>  
             </div>
         );
-    };
+    }
 
 }
 
-export default UserEditContainer
+export default UserEditView

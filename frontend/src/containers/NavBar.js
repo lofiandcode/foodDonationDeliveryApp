@@ -37,6 +37,8 @@ export default class NavBar extends Component {
               name='logout'
               active={activeItem === 'logout'}
               onClick={this.handleItemClick}
+              as={ Link }
+              to='/'
             />
           </Menu.Menu>
         </Menu>

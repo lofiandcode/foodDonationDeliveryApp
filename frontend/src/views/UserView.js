@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import User from '../components/User';
 import About from '../components/About';
-import DonationsContainer from './DonationsContainer';
+import DonationsContainer from '../containers/DonationsContainer';
 import Contact from '../components/Contact';
-import UserEditContainer from './UserEditContainer';
-import MatchContainer from './MatchContainer';
-import NavBar from './NavBar';
+import UserEditView from './UserEditView';
+import MatchContainer from '../containers/MatchContainer';
+import NavBar from '../containers/NavBar';
+import LoginView from './LoginView';
 
-class UserContainer extends Component {
+class UserView extends Component {
 
     constructor() {
         super();
@@ -159,32 +160,36 @@ class UserContainer extends Component {
             <Router>
                 <NavBar />
                 <Route
-                exact path="/profile"
-                render={() => {
-                    return (
-                        <div>
-                            <User user={this.state.currentUser}/>
-                            <About user={this.state.currentUser}/>
-                            <DonationsContainer 
-                                user={this.state.currentUser} 
-                                handleDonationChange={this.handleDonationChange} 
-                                newDonation={this.state.newDonation} 
-                                handleDonationSubmit={this.handleDonationSubmit}
-                            />
-                            <Contact user={this.state.currentUser}/>
-                            <MatchContainer 
-                                driver={this.state.testDriver}
-                                donor={this.state.testDonor}
-                                food_bank={this.state.testFoodBank} 
-                                items={this.state.testItem}
-                            />
-                        </div>
-                    )
-                }}
+                    exact path='/'
+                    render={() => <LoginView />}
+                />
+                <Route
+                    exact path="/profile"
+                    render={() => {
+                        return (
+                            <div>
+                                <User user={this.state.currentUser}/>
+                                <About user={this.state.currentUser}/>
+                                <DonationsContainer 
+                                    user={this.state.currentUser} 
+                                    handleDonationChange={this.handleDonationChange} 
+                                    newDonation={this.state.newDonation} 
+                                    handleDonationSubmit={this.handleDonationSubmit}
+                                />
+                                <Contact user={this.state.currentUser}/>
+                                <MatchContainer 
+                                    driver={this.state.testDriver}
+                                    donor={this.state.testDonor}
+                                    food_bank={this.state.testFoodBank} 
+                                    items={this.state.testItem}
+                                />
+                            </div>
+                        )
+                    }}
                 />
                 <Route
                     exact path="/profile/edit"
-                    render={() => <UserEditContainer user={this.state.currentUser} handleFormChange={this.handleFormChange} handleSubmit={this.handleSubmit}/>}
+                    render={() => <UserEditView user={this.state.currentUser} handleFormChange={this.handleFormChange} handleSubmit={this.handleSubmit}/>}
                     />
             </Router>
         );
@@ -192,4 +197,4 @@ class UserContainer extends Component {
 
 }
 
-export default UserContainer;
+export default UserView;
