@@ -19,6 +19,7 @@ class LoginForm extends Component {
           <Form.Input
             placeholder='Password'
             name='password'
+            type='password'
             value={password}
             onChange={handleLoginChange}
           />
