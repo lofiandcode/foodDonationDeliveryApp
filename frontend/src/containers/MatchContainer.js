@@ -1,7 +1,7 @@
 import React from 'react'
 
 const MatchContainer = (props) => {
-        // console.log('MatchContainer props = ',props)
+        console.log('MatchContainer props = ',props)
         if (props.driver.name) {
             return (
                 <div>
@@ -22,6 +22,7 @@ const MatchContainer = (props) => {
                 </div>
             );
         } else {
+            console.log('IN esle in match container')
             return null
         }
     
