@@ -18,6 +18,7 @@ class App extends Component {
         users: [],
         currentUser: {},
         newDonation: '',
+        loggedIn: false,
         testDriver: {},
         testDonor: {},
         testFoodBank: {},
@@ -165,7 +166,11 @@ setCurrentUser = (username, password) => {
         }
      })
     //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
-     this.setState({currentUser: loginUser[0]})
+  if (loginUser.length === 1) {
+    this.setState({currentUser: loginUser[0], loggedIn: true})
+  } else {
+    console.log('LOGIN ERROR: no user matches login info')
+  }
     //  , () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser)
 }
 
@@ -200,6 +205,7 @@ handleSubmit = (event) => {
           render={() => 
             <LoginView 
               handleLoginSubmit={this.handleLoginSubmit}
+              loggedIn={this.state.loggedIn}
             />
           }
         />
