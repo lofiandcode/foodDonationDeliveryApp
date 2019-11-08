@@ -37,6 +37,11 @@ getUsers = () => {
             users: data
         });
     })
+    .then(() => {
+      if (this.state.currentUser !== {}) {
+        this.setCurrentUser(this.state.currentUser.username, this.state.currentUser.password)
+      }
+    })
     .catch(err=>console.log(err))
 }
 
@@ -106,7 +111,7 @@ joinItemAndCurrentUser = (item) => {
 
 clearForm = () => {
     // console.log('In ClearForm user_item = ', user_item)
-    console.log('clearForm users = ', this.state.users);
+    // console.log('clearForm users = ', this.state.users);
     this.setState({
         testDriver: {
         name: 'John Doe',
@@ -128,21 +133,21 @@ clearForm = () => {
 }
 
 resetUsers = () => {
-    console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
+  // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
+  // console.log('In resetUsers() and about to reset users')
     this.getUsers();
-    this.setCurrentUser(this.state.currentUser.username, this.state.currentUser.password)
     this.setState({newDonation: ''})
 }
 
 handleLoginSubmit = (loginData) => {
-    console.log("IN handleLoginSubmit")
-    console.log('Username/Password = ', loginData)
+    // console.log("IN handleLoginSubmit")
+    // console.log('Username/Password = ', loginData)
     this.setCurrentUser(loginData.username, loginData.password)
 }
 
 setCurrentUser = (username, password) => {
-    console.log('IN setCurrentUser(), username = ', username)
-    console.log('IN setCurrentUser(), password = ', password)
+    // console.log('IN setCurrentUser(), username = ', username)
+    // console.log('IN setCurrentUser(), password = ', password)
     const loginUser = this.state.users.filter ( user => {
         // console.log('***********************************')
         // console.log('username = ', username)
@@ -160,7 +165,8 @@ setCurrentUser = (username, password) => {
         }
      })
     //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
-     this.setState({currentUser: loginUser[0]}, () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser))
+     this.setState({currentUser: loginUser[0]})
+    //  , () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser)
 }
 
 //   this.props.history.push('/moneyform');
@@ -203,13 +209,12 @@ handleSubmit = (event) => {
             <UserView 
               currentUser={this.state.currentUser}
               newDonation={this.state.newDonation}
+              handleDonationChange={this.handleDonationChange}
+              handleDonationSubmit={this.handleDonationSubmit}
               testDriver={this.state.testDriver}
               testDonor={this.state.testDonor}
               testFoodBank={this.state.testFoodBank} 
               testItem={this.state.testItem}
-              handleDonationChange={this.handleDonationChange}
-              handleDonationSubmit={this.handleDonationSubmit}
-              handleLoginSubmit={this.handleLoginSubmit}
             />
           }
         />

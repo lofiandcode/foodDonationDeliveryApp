@@ -8,8 +8,8 @@ import MatchContainer from '../containers/MatchContainer';
 class UserView extends Component {
 
     render() {
-        console.log("%cProfile render fires", "color:red;")
-        console.log('props at render = ', this.props)
+        // console.log("%cProfile render fires", "color:red;")
+        // console.log('props at render = ', this.props)
         return (
             <div>
                 <User user={this.props.currentUser}/>

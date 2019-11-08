@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 
 class UserEditForm extends Component {
     render() {
-        console.log('UserEditForm props = ', this.props)
+        // console.log('UserEditForm props = ', this.props)
         if (this.props.user.name) {
-            console.log('IN UserEditForm about to render form')
+            // console.log('IN UserEditForm about to render form')
             return (
                 <div>
                     <form>
@@ -41,7 +41,7 @@ class UserEditForm extends Component {
                 </div>
             )
         } else {
-            console.log('IN UserEditForm outer else')
+            // console.log('IN UserEditForm outer else')
             return null;
         }
     }
