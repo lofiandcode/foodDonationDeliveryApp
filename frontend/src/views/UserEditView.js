@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import UserForm from '../components/UserForm'
+import UserEditForm from '../components/UserEditForm'
 
 class UserEditView extends Component {
 
     render() {
+        console.log('UserEditView props = ', this.props)
         return (
             <div>
-              <UserForm user={this.props.user} handleFormChange={this.props.handleFormChange} handleSubmit={this.handleSubmit}/>  
+              <UserEditForm 
+              user={this.props.currentUser} 
+              handleFormChange={this.props.handleFormChange} 
+              handleSubmit={this.props.handleSubmit}/>  
             </div>
         );
     }
