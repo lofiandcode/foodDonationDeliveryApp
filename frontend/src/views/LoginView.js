@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {  Redirect } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import LoginForm from '../components/LoginForm'
 
 class LoginView extends Component {
@@ -21,22 +23,24 @@ class LoginView extends Component {
     }
 
     handleLoginSubmit = () => {
-        this.props.handleLoginSubmit(this.state)
-        
+        this.props.handleLoginSubmit(this.state);
+        // this.props.history.push('/profile')
     }
 
     render() {
         return(
-            <div>
+            <React.Fragment>
+                {this.props.loggedIn? <Redirect to='/profile'/>: null}
                 <LoginForm 
                 handleLoginChange={this.handleLoginChange}
                 handleLoginSubmit={this.handleLoginSubmit}
                 username={this.state.username}
                 password={this.state.password}
                 />
-            </div>
+            </React.Fragment>
         )
     }
 }
 
 export default LoginView
+// withRouter(LoginView)
