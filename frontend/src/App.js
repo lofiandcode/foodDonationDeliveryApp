@@ -111,6 +111,27 @@ class App extends Component {
       // .then(json => console.log('join post = ', json))
 
   }
+  joinLocationAndCurrentUser = (location) => {
+    console.log('currentUser.id = ', this.state.currentUser.id)
+    console.log('location.id = ', location.id)
+    fetch('http://localhost:3000/api/v1/user_locations', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            user_location: {
+                user_id: this.state.currentUser.id,
+                location_id: location.id
+            }
+        })
+    })
+    .then(() => this.getUsers())
+    .catch(err => alert(err.message));
+    // .then(response => response.json())
+
+}
   clearForm = () => {
       // console.log('In ClearForm user_item = ', user_item)
       // console.log('clearForm users = ', this.state.users);
@@ -200,7 +221,7 @@ class App extends Component {
           })
       })
       .then(response => response.json())
-      .then(json => console.log(json))
+      .then(data => this.joinLocationAndCurrentUser(data))
       .catch(err => alert(err.message));
 
 //

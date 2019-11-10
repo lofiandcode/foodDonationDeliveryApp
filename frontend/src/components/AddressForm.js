@@ -27,8 +27,18 @@ class AddressForm extends Component {
         const submittedAddress = this.state.street.concat(', ', this.state.city, ', ', this.state.state, ' ', this.state.zipcode)
         const submittedMilesFrom = parseFloat(this.state.milesFrom)
         this.props.handleAddressSubmit(this.state.name, submittedAddress, submittedMilesFrom);
+        this.clearForm();
         this.props.history.push('/profile')
     }
+    clearForm = () => this.setState({
+        name: '',
+        street: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        milesFrom: ''
+    }, () => console.log('AddressForm state = ', this.state));
+    
     render() {
         return (
             <Form onSubmit={this.handleSubmit}>
