@@ -7,7 +7,9 @@ import NavBar from './containers/NavBar';
 import LoginView from './views/LoginView';
 import UserEditView from './views/UserEditView';
 import CreateProfileView from './views/CreateProfileView';
-require('dotenv').config();
+require("dotenv").config()
+
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import NavBar from './containers/NavBar';
@@ -20,15 +22,21 @@ class App extends Component {
         currentUser: {},
         newDonation: '',
         loggedIn: false,
+        loginError: false,
         testDriver: {},
         testDonor: {},
         testFoodBank: {},
-        testItem: {}
+        testItem: {},
     }
   }
-
   componentDidMount() {
       this.getUsers();
+      console.log('About to fetch')
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
+      +Seattle,+WA+98101&key=${API_KEY}`)
+      .then(response => response.json())
+      .then(data => console.log('Geocode API response = ', data))
+      console.log("currentUser = ", this.state.currentUser)
   }
 
   getUsers = () => {
@@ -46,14 +54,12 @@ class App extends Component {
       })
       .catch(err=>console.log(err))
   }
-
   resetUsers = () => {
     // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
     // console.log('In resetUsers() and about to reset users')
       this.getUsers();
       this.setState({newDonation: ''})
   }
-
   setCurrentUser = (username, password) => {
     // console.log('IN setCurrentUser(), username = ', username)
     // console.log('IN setCurrentUser(), password = ', password)
@@ -77,11 +83,11 @@ class App extends Component {
   if (loginUser.length === 1) {
     this.setState({currentUser: loginUser[0], loggedIn: true})
   } else {
-    console.log('LOGIN ERROR: no user matches login info')
+    this.setState({loginError: true, loggedIn: false, currentUser: {}}, () => console.log('LOGIN ERROR = ', this.state.loginError))
+    
   }
     //  , () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser)
   }
-
   joinItemAndCurrentUser = (item) => {
       // console.log('item = ', item)
       // console.log('item.id = ', item.id)
@@ -104,7 +110,6 @@ class App extends Component {
       // .then(json => console.log('join post = ', json))
 
   }
-
   clearForm = () => {
       // console.log('In ClearForm user_item = ', user_item)
       // console.log('clearForm users = ', this.state.users);
@@ -141,7 +146,6 @@ class App extends Component {
     })
     // , () => console.log(this.state.currentUser[event.target.name])
   }
-
   handleDonationChange = (event) => {
     event.preventDefault();
     event.persist();
@@ -156,7 +160,6 @@ class App extends Component {
       // console.log('Username/Password = ', loginData)
       this.setCurrentUser(loginData.username, loginData.password)
   }
-
   handleSubmit = (event) => {
       event.preventDefault();
       fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
@@ -176,7 +179,6 @@ class App extends Component {
       .then(json => console.log(json))
       .catch(err => alert(err.message));
   }
-
   handleDonationSubmit = (event) => {
     event.preventDefault();
     console.log('About to POST newDonation')
@@ -201,7 +203,7 @@ class App extends Component {
         <Router>
           <NavBar />
           <Route
-            exact path='/'
+            exact path='/login'
             render={() => 
               <LoginView 
                 handleLoginSubmit={this.handleLoginSubmit}

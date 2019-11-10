@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import CreateAccountForm from '../components/CreateAccountForn'
 
 class CreateProfileView extends Component {
     render() {
         return (
             <Fragment>
-                <h1>Hi! I'm the Create Profile View</h1>
+                <CreateAccountForm />
             </Fragment>
         )
     }
