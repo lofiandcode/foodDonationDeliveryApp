@@ -25,7 +25,7 @@ class CreateAccountForm extends Component {
       phoneNum: '',
       about: ''
     }
-    console.log("CreateAccountForm = ", this.props)
+    // console.log("CreateAccountForm = ", this.props)
   }
   handleChange = (e) => {
     e.persist();

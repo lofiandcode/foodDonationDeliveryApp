@@ -112,8 +112,8 @@ class App extends Component {
 
   }
   joinLocationAndCurrentUser = (location) => {
-    console.log('currentUser.id = ', this.state.currentUser.id)
-    console.log('location.id = ', location.id)
+    // console.log('currentUser.id = ', this.state.currentUser.id)
+    // console.log('location.id = ', location.id)
     fetch('http://localhost:3000/api/v1/user_locations', {
         method: "POST",
         headers: {
@@ -184,7 +184,7 @@ class App extends Component {
   }
   handleCreateAccountSubmit = (event, newUser) => {
       event.preventDefault();
-      console.log('newUser = ', newUser)
+      // console.log('newUser = ', newUser)
       fetch('http://localhost:3000/api/v1/users/', {
           method: "POST",
           headers: {
