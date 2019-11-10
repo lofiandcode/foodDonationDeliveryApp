@@ -7,6 +7,7 @@ import NavBar from './containers/NavBar';
 import LoginView from './views/LoginView';
 import UserEditView from './views/UserEditView';
 import CreateProfileView from './views/CreateProfileView';
+import AddressView from './views/AddressView';
 require("dotenv").config()
 
 // const API_KEY = process.env.REACT_APP_API_KEY;
@@ -54,7 +55,7 @@ class App extends Component {
       })
       .catch(err=>console.log(err))
   }
-  resetUsers = () => {
+  resetUsersAndDonation = () => {
     // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
     // console.log('In resetUsers() and about to reset users')
       this.getUsers();
@@ -81,7 +82,7 @@ class App extends Component {
     })
     //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
   if (loginUser.length === 1) {
-    this.setState({currentUser: loginUser[0], loggedIn: true})
+    this.setState({currentUser: loginUser[0], loggedIn: true}, () => console.log('currentUser = ', this.state.currentUser))
   } else {
     this.setState({loginError: true, loggedIn: false, currentUser: {}}, () => console.log('LOGIN ERROR = ', this.state.loginError))
     
@@ -129,7 +130,7 @@ class App extends Component {
           testItem: {
           name: this.state.newDonation
           }
-      }, () => this.resetUsers())
+      }, () => this.resetUsersAndDonation())
       
   }
 
@@ -179,8 +180,32 @@ class App extends Component {
           })
       })
       .then(response => response.json())
+      .then(data => this.setState({currentUser: data}, () => this.getUsers()))
+      .catch(err => alert(err.message));
+  }
+  handleAddressSubmit = (locationName, newAddress, milesFrom) => {
+    // console.log('IN App handler newAddress = ', newAddress)
+    // console.log("LocationName = ", locationName)
+    // console.log("mileFrom = ", milesFrom)
+    fetch('http://localhost:3000/api/v1/locations/', {
+          method: "POST",
+          headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+          },
+          body: JSON.stringify({
+              name: locationName,
+              address: newAddress,
+              milesFrom: milesFrom
+          })
+      })
+      .then(response => response.json())
       .then(json => console.log(json))
       .catch(err => alert(err.message));
+
+//
+
+
   }
   handleSubmit = (event) => {
     event.preventDefault();
@@ -237,6 +262,12 @@ class App extends Component {
             exact path='/profile/create'
             render={() =>
               <CreateProfileView handleCreateAccountSubmit={this.handleCreateAccountSubmit}/>
+            }
+          />
+          <Route 
+            exact path='/profile/address'
+            render={() =>
+              <AddressView handleAddressSubmit={this.handleAddressSubmit}/>
             }
           />
           <Route

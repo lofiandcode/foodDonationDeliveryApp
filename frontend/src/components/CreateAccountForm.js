@@ -6,6 +6,7 @@ import {
   Select,
   TextArea,
 } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom';
 
 const options = [
   { key: 'drive', text: 'Driver', value: 'driver' },
@@ -35,10 +36,15 @@ class CreateAccountForm extends Component {
     })
   }
 
+  handleSubmit = (e) => {
+    this.props.handleCreateAccountSubmit(e, this.state);
+    this.props.history.push('/profile/address')
+  }
+
   render() {
     // const { value } = this.state
     return (
-      <Form onSubmit={(e) => this.props.handleCreateAccountSubmit(e, this.state)}>
+      <Form onSubmit={(e) => this.handleSubmit(e)}>
         <Form.Group widths='equal'>
           <Form.Field
             control={Select}
@@ -126,4 +132,4 @@ class CreateAccountForm extends Component {
   }
 }
 
-export default CreateAccountForm
+export default withRouter(CreateAccountForm)
