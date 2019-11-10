@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_11_10_192220) do
     t.boolean "completed"
     t.integer "user_id"
     t.integer "user_item_id_1"
-    t.string "user_item_id_2"
+    t.integer "user_item_id_2"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

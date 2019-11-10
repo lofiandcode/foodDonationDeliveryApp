@@ -4,7 +4,7 @@ class CreateMatches < ActiveRecord::Migration[6.0]
       t.boolean :completed
       t.integer :user_id
       t.integer :user_item_id_1
-      t.string :user_item_id_2
+      t.integer :user_item_id_2
 
       t.timestamps
     end
