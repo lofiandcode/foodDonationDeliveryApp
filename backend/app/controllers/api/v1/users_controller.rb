@@ -15,7 +15,7 @@ class Api::V1::UsersController < ApplicationController
 
     def create
         # puts user_params
-        @user = User.new(name: 'post test')
+        @user = User.new(user_params)
         @user.save
         render :json => @user
     end

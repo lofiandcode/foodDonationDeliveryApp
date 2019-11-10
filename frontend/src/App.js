@@ -7,9 +7,10 @@ import NavBar from './containers/NavBar';
 import LoginView from './views/LoginView';
 import UserEditView from './views/UserEditView';
 import CreateProfileView from './views/CreateProfileView';
+import AddressView from './views/AddressView';
 require("dotenv").config()
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+// const API_KEY = process.env.REACT_APP_API_KEY;
 
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import NavBar from './containers/NavBar';
@@ -31,12 +32,12 @@ class App extends Component {
   }
   componentDidMount() {
       this.getUsers();
-      console.log('About to fetch')
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
-      +Seattle,+WA+98101&key=${API_KEY}`)
-      .then(response => response.json())
-      .then(data => console.log('Geocode API response = ', data))
-      console.log("currentUser = ", this.state.currentUser)
+      // console.log('About to fetch')
+      // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
+      // +Seattle,+WA+98101&key=${API_KEY}`)
+      // .then(response => response.json())
+      // .then(data => console.log('Geocode API response = ', data))
+      // console.log("currentUser = ", this.state.currentUser)
   }
 
   getUsers = () => {
@@ -54,7 +55,7 @@ class App extends Component {
       })
       .catch(err=>console.log(err))
   }
-  resetUsers = () => {
+  resetUsersAndDonation = () => {
     // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
     // console.log('In resetUsers() and about to reset users')
       this.getUsers();
@@ -81,7 +82,7 @@ class App extends Component {
     })
     //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
   if (loginUser.length === 1) {
-    this.setState({currentUser: loginUser[0], loggedIn: true})
+    this.setState({currentUser: loginUser[0], loggedIn: true}, () => console.log('currentUser = ', this.state.currentUser))
   } else {
     this.setState({loginError: true, loggedIn: false, currentUser: {}}, () => console.log('LOGIN ERROR = ', this.state.loginError))
     
@@ -110,6 +111,27 @@ class App extends Component {
       // .then(json => console.log('join post = ', json))
 
   }
+  joinLocationAndCurrentUser = (location) => {
+    // console.log('currentUser.id = ', this.state.currentUser.id)
+    // console.log('location.id = ', location.id)
+    fetch('http://localhost:3000/api/v1/user_locations', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            user_location: {
+                user_id: this.state.currentUser.id,
+                location_id: location.id
+            }
+        })
+    })
+    .then(() => this.getUsers())
+    .catch(err => alert(err.message));
+    // .then(response => response.json())
+
+}
   clearForm = () => {
       // console.log('In ClearForm user_item = ', user_item)
       // console.log('clearForm users = ', this.state.users);
@@ -129,23 +151,23 @@ class App extends Component {
           testItem: {
           name: this.state.newDonation
           }
-      }, () => this.resetUsers())
+      }, () => this.resetUsersAndDonation())
       
   }
 
-  handleFormChange = (event) => {
-    event.preventDefault();
-    event.persist();
-    // console.log(event.target.value)
-    // console.log(event.target.name)
-    this.setState({
-        currentUser: {
-            ...this.state.currentUser,
-            [event.target.name]: event.target.value
-        }
-    })
-    // , () => console.log(this.state.currentUser[event.target.name])
-  }
+  // handleFormChange = (event) => {
+  //   event.preventDefault();
+  //   event.persist();
+  //   // console.log(event.target.value)
+  //   // console.log(event.target.name)
+  //   this.setState({
+  //       currentUser: {
+  //           ...this.state.currentUser,
+  //           [event.target.name]: event.target.value
+  //       }
+  //   })
+  //   // , () => console.log(this.state.currentUser[event.target.name])
+  // }
   handleDonationChange = (event) => {
     event.preventDefault();
     event.persist();
@@ -160,25 +182,71 @@ class App extends Component {
       // console.log('Username/Password = ', loginData)
       this.setCurrentUser(loginData.username, loginData.password)
   }
-  handleSubmit = (event) => {
+  handleCreateAccountSubmit = (event, newUser) => {
       event.preventDefault();
-      fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
-          method: "PATCH",
+      // console.log('newUser = ', newUser)
+      fetch('http://localhost:3000/api/v1/users/', {
+          method: "POST",
           headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
           },
           body: JSON.stringify({
-              name: this.state.currentUser.name,
-              role: this.state.currentUser.role,
-              phoneNum: this.state.currentUser.phoneNum,
-              about: this.state.currentUser.about
+              name: newUser.name,
+              username: newUser.username,
+              password: newUser.password,
+              role: 'driver',
+              phoneNum: newUser.phoneNum,
+              about: newUser.about
           })
       })
       .then(response => response.json())
-      .then(json => console.log(json))
+      .then(data => this.setState({currentUser: data}, () => this.getUsers()))
       .catch(err => alert(err.message));
   }
+  handleAddressSubmit = (locationName, newAddress, milesFrom) => {
+    // console.log('IN App handler newAddress = ', newAddress)
+    // console.log("LocationName = ", locationName)
+    // console.log("mileFrom = ", milesFrom)
+    fetch('http://localhost:3000/api/v1/locations/', {
+          method: "POST",
+          headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+          },
+          body: JSON.stringify({
+              name: locationName,
+              address: newAddress,
+              milesFrom: milesFrom
+          })
+      })
+      .then(response => response.json())
+      .then(data => this.joinLocationAndCurrentUser(data))
+      .catch(err => alert(err.message));
+
+//
+
+
+  }
+  handleSubmit = (event) => {
+    event.preventDefault();
+    fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
+        method: "PATCH",
+        headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            name: this.state.currentUser.name,
+            role: this.state.currentUser.role,
+            phoneNum: this.state.currentUser.phoneNum,
+            about: this.state.currentUser.about
+        })
+    })
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(err => alert(err.message));
+}
   handleDonationSubmit = (event) => {
     event.preventDefault();
     console.log('About to POST newDonation')
@@ -214,7 +282,13 @@ class App extends Component {
           <Route 
             exact path='/profile/create'
             render={() =>
-              <CreateProfileView />
+              <CreateProfileView handleCreateAccountSubmit={this.handleCreateAccountSubmit}/>
+            }
+          />
+          <Route 
+            exact path='/profile/address'
+            render={() =>
+              <AddressView handleAddressSubmit={this.handleAddressSubmit}/>
             }
           />
           <Route
