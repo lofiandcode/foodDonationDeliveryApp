@@ -9,7 +9,7 @@ import UserEditView from './views/UserEditView';
 import CreateProfileView from './views/CreateProfileView';
 require("dotenv").config()
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+// const API_KEY = process.env.REACT_APP_API_KEY;
 
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import NavBar from './containers/NavBar';
@@ -31,12 +31,12 @@ class App extends Component {
   }
   componentDidMount() {
       this.getUsers();
-      console.log('About to fetch')
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
-      +Seattle,+WA+98101&key=${API_KEY}`)
-      .then(response => response.json())
-      .then(data => console.log('Geocode API response = ', data))
-      console.log("currentUser = ", this.state.currentUser)
+      // console.log('About to fetch')
+      // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
+      // +Seattle,+WA+98101&key=${API_KEY}`)
+      // .then(response => response.json())
+      // .then(data => console.log('Geocode API response = ', data))
+      // console.log("currentUser = ", this.state.currentUser)
   }
 
   getUsers = () => {
@@ -133,19 +133,19 @@ class App extends Component {
       
   }
 
-  handleFormChange = (event) => {
-    event.preventDefault();
-    event.persist();
-    // console.log(event.target.value)
-    // console.log(event.target.name)
-    this.setState({
-        currentUser: {
-            ...this.state.currentUser,
-            [event.target.name]: event.target.value
-        }
-    })
-    // , () => console.log(this.state.currentUser[event.target.name])
-  }
+  // handleFormChange = (event) => {
+  //   event.preventDefault();
+  //   event.persist();
+  //   // console.log(event.target.value)
+  //   // console.log(event.target.name)
+  //   this.setState({
+  //       currentUser: {
+  //           ...this.state.currentUser,
+  //           [event.target.name]: event.target.value
+  //       }
+  //   })
+  //   // , () => console.log(this.state.currentUser[event.target.name])
+  // }
   handleDonationChange = (event) => {
     event.preventDefault();
     event.persist();
@@ -160,25 +160,47 @@ class App extends Component {
       // console.log('Username/Password = ', loginData)
       this.setCurrentUser(loginData.username, loginData.password)
   }
-  handleSubmit = (event) => {
+  handleCreateAccountSubmit = (event, newUser) => {
       event.preventDefault();
-      fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
-          method: "PATCH",
+      console.log('newUser = ', newUser)
+      fetch('http://localhost:3000/api/v1/users/', {
+          method: "POST",
           headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
           },
           body: JSON.stringify({
-              name: this.state.currentUser.name,
-              role: this.state.currentUser.role,
-              phoneNum: this.state.currentUser.phoneNum,
-              about: this.state.currentUser.about
+              name: newUser.name,
+              username: newUser.username,
+              password: newUser.password,
+              role: 'driver',
+              phoneNum: newUser.phoneNum,
+              about: newUser.about
           })
       })
       .then(response => response.json())
       .then(json => console.log(json))
       .catch(err => alert(err.message));
   }
+  handleSubmit = (event) => {
+    event.preventDefault();
+    fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
+        method: "PATCH",
+        headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            name: this.state.currentUser.name,
+            role: this.state.currentUser.role,
+            phoneNum: this.state.currentUser.phoneNum,
+            about: this.state.currentUser.about
+        })
+    })
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(err => alert(err.message));
+}
   handleDonationSubmit = (event) => {
     event.preventDefault();
     console.log('About to POST newDonation')
@@ -214,7 +236,7 @@ class App extends Component {
           <Route 
             exact path='/profile/create'
             render={() =>
-              <CreateProfileView />
+              <CreateProfileView handleCreateAccountSubmit={this.handleCreateAccountSubmit}/>
             }
           />
           <Route

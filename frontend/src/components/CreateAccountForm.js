@@ -14,35 +14,54 @@ const options = [
 ]
 
 class CreateAccountForm extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       name: '',
       username: '',
       password: '',
       role: '',
       phoneNum: '',
       about: ''
+    }
+    console.log("CreateAccountForm = ", this.props)
   }
-
-  handleChange = (e, { value }) => this.setState({ value })
+  handleChange = (e) => {
+    e.persist();
+    // console.log('IN handleChange')
+    // const key = e.target.name;
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
   render() {
     // const { value } = this.state
     return (
-      <Form>
+      <Form onSubmit={(e) => this.props.handleCreateAccountSubmit(e, this.state)}>
         <Form.Group widths='equal'>
           <Form.Field
             control={Select}
-            label='Account Type'
             options={options}
+            name='role'
+            selection={this.state.role}
+            onChange={this.handleChange}
+            label='Account Type'
             placeholder='Select Account Type'
           />
           <Form.Field
             control={Input}
+            name='username'
+            value={this.state.username}
+            onChange={this.handleChange}
             label='Username'
             placeholder='Username'
           />
           <Form.Field
             control={Input}
+            name='password'
+            value={this.state.password}
+            onChange={this.handleChange}
             label='Password'
             placeholder='Password'
           />
@@ -50,11 +69,17 @@ class CreateAccountForm extends Component {
         <Form.Group widths='equal'>
           <Form.Field
             control={Input}
+            name='name'
+            value={this.state.name}
+            onChange={this.handleChange}
             label='Individual or Organization Name'
             placeholder='Name'
           />
           <Form.Field
             control={Input}
+            name='phoneNum'
+            value={this.state.phoneNum}
+            onChange={this.handleChange}
             label='Phone'
             placeholder='(xxx) xxx-xxxx'
           />
@@ -85,6 +110,9 @@ class CreateAccountForm extends Component {
         </Form.Group> */}
         <Form.Field
           control={TextArea}
+          name='about'
+          value={this.state.about}
+          onChange={this.handleChange}
           label='About'
           placeholder='Tell us more about you...'
         />
