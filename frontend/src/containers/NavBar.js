@@ -7,6 +7,11 @@ export default class NavBar extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
+  handleLoginClick = (e, { name }) => {
+    
+    this.setState({ activeItem: name })
+  }
+
   render() {
     const { activeItem } = this.state
 
@@ -36,9 +41,9 @@ export default class NavBar extends Component {
             <Menu.Item
               name='logout'
               active={activeItem === 'logout'}
-              onClick={this.handleItemClick}
+              onClick={this.handleLoginClick}
               as={ Link }
-              to='/'
+              to='/login'
             />
           </Menu.Menu>
         </Menu>

@@ -24,7 +24,7 @@ class LoginForm extends Component {
             onChange={handleLoginChange}
           />
           <Form.Button 
-            content='Submit'
+            content='Sign In'
           />
         </Form.Group>
       </Form>

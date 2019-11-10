@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {  Redirect } from 'react-router-dom';
-// import { withRouter } from 'react-router-dom';
+import { Message, Button } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import LoginForm from '../components/LoginForm'
 
 class LoginView extends Component {
@@ -22,6 +23,10 @@ class LoginView extends Component {
         })
     }
 
+    handleCreateAccountClick = () => {
+        this.props.history.push('/profile/create')
+    }
+
     handleLoginSubmit = () => {
         this.props.handleLoginSubmit(this.state);
         // this.props.history.push('/profile')
@@ -37,10 +42,21 @@ class LoginView extends Component {
                 username={this.state.username}
                 password={this.state.password}
                 />
+                <Button basic onClick={this.handleCreateAccountClick}>Create Account</Button>
+                {this.props.loginError? 
+                    <Message className='loginError'
+                    error
+                    header='Action Forbidden'
+                    content='Incorrect Username and/or Password.'
+                    /> 
+                    : 
+                    null 
+                }
+
             </React.Fragment>
         )
     }
 }
 
-export default LoginView
-// withRouter(LoginView)
+export default withRouter(LoginView)
+// 
