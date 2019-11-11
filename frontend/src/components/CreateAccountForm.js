@@ -9,7 +9,7 @@ import {
 import { withRouter } from 'react-router-dom';
 
 const options = [
-  { key: 'drive', text: 'Driver', value: 'driver' },
+  { key: 'driver', text: 'Driver', value: 'driver' },
   { key: 'donor', text: 'Donor', value: 'donor' },
   { key: 'FB', text: 'Food Bank', value: 'food bank' },
 ]
@@ -36,13 +36,22 @@ class CreateAccountForm extends Component {
     })
   }
 
+  handleSelectChange = (e) => {
+    // e.persist();
+    // console.log('IN handleChange')
+    // console.log('e = ',e);
+    this.setState({
+      role: e.target.innerText.toLowerCase()
+    })
+  }
+
   handleSubmit = (e) => {
     this.props.handleCreateAccountSubmit(e, this.state);
     this.props.history.push('/profile/address')
   }
 
   render() {
-    // const { value } = this.state
+    console.log('create account state', this.state)
     return (
       <Form onSubmit={(e) => this.handleSubmit(e)}>
         <Form.Group widths='equal'>
@@ -51,7 +60,7 @@ class CreateAccountForm extends Component {
             options={options}
             name='role'
             selection={this.state.role}
-            onChange={this.handleChange}
+            onChange={this.handleSelectChange}
             label='Account Type'
             placeholder='Select Account Type'
           />

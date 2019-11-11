@@ -25,8 +25,8 @@ while i < users.length && i < locations.length  do
 end
 
 UserItem.create(user_id: users[0].id, item_id: items[0].id);
-UserItem.create(user_id: users[3].id, item_id: items[0].id);
-UserItem.create(user_id: users[4].id, item_id: items[1].id);
+UserItem.create(user_id: users[3].id, item_id: items[1].id);
+UserItem.create(user_id: users[4].id, item_id: items[2].id);
 
 user_items = UserItem.all;
 

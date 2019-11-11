@@ -10,7 +10,7 @@ import CreateProfileView from './views/CreateProfileView';
 import AddressView from './views/AddressView';
 require("dotenv").config()
 
-// const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import NavBar from './containers/NavBar';
@@ -32,12 +32,12 @@ class App extends Component {
   }
   componentDidMount() {
       this.getUsers();
-      // console.log('About to fetch')
-      // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
-      // +Seattle,+WA+98101&key=${API_KEY}`)
-      // .then(response => response.json())
-      // .then(data => console.log('Geocode API response = ', data))
-      // console.log("currentUser = ", this.state.currentUser)
+      console.log('About to fetch')
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
+      +Seattle,+WA+98101&key=${API_KEY}`)
+      .then(response => response.json())
+      .then(data => console.log('Geocode API response = ', data))
+      console.log("currentUser = ", this.state.currentUser)
   }
 
   getUsers = () => {

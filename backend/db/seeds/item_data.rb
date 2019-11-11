@@ -5,6 +5,12 @@ Item.create({
     units: 'loaves'
 })
 Item.create({
+    name: 'Bread',
+    category: 'Perishable Food',
+    quantity: 0,
+    units: 'loaves'
+})
+Item.create({
     name: 'Brussel Sprouts',
     category: 'Perishable Food',
     quantity: 100,
