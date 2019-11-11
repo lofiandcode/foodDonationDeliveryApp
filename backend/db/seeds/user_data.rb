@@ -1,11 +1,19 @@
 require 'faker'
 
+# User.create({
+#     name: 'Icicle Seafoods',
+#     username: 'Icicle Seafoods',
+#     password: '1234',
+#     role: 'donor',
+#     phoneNum: '(206) 282-0988',
+#     about: Faker::Lorem.paragraph(sentence_count: 45)
+# })
 User.create({
-    name: 'Icicle Seafoods',
-    username: 'Icicle Seafoods',
+    name: 'Whole Foods Market',
+    username: 'Whole Foods Market',
     password: '1234',
     role: 'donor',
-    phoneNum: '(206) 282-0988',
+    phoneNum: '(206) 621-9700',
     about: Faker::Lorem.paragraph(sentence_count: 45)
 })
 

@@ -1,6 +1,13 @@
+# Location.create({
+#     name: 'Icicle Seafoods',
+#     address: '4019 21st Ave W, Seattle, WA 98199',
+#     lat: 0,
+#     lng: 0,
+#     milesFrom: 0
+# })
 Location.create({
-    name: 'Icicle Seafoods',
-    address: '4019 21st Ave W, Seattle, WA 98199',
+    name: 'Whole Foods Market',
+    address: '2210 Westlake Ave, Seattle, WA 98121',
     lat: 0,
     lng: 0,
     milesFrom: 0
@@ -19,6 +26,9 @@ Location.create({
     lng: -122.321965,
     milesFrom: 10.0
 })
+#
+#This line starts real Food Bank seed data
+#
 Location.create({
     name: 'Asian Counseling and Referral Services Food Bank',
     address: '919 S King St, Seattle, WA 98104',
