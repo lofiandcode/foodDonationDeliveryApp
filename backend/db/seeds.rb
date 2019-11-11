@@ -17,6 +17,7 @@ users = User.all;
 items = Item.all;
 locations = Location.all;
 
+
 i = 0;
 while i < users.length && i < locations.length  do
     UserLocation.create(user_id: users[i].id, location_id: locations[i].id);
@@ -24,6 +25,14 @@ while i < users.length && i < locations.length  do
 end
 
 UserItem.create(user_id: users[0].id, item_id: items[0].id);
-UserItem.create(user_id: users[3].id, item_id: items[0].id);
-UserItem.create(user_id: users[4].id, item_id: items[1].id);
+UserItem.create(user_id: users[12].id, item_id: items[1].id);
+UserItem.create(user_id: users[18].id, item_id: items[5].id);
+UserItem.create(user_id: users[20].id, item_id: items[4].id);
+UserItem.create(user_id: users[21].id, item_id: items[3].id);
+UserItem.create(user_id: users[23].id, item_id: items[2].id);
+# UserItem.create(user_id: users[0].id, item_id: items[0].id);
+
+# user_items = UserItem.all;
+
+# match = Match.create(completed: false, user_id: users[1].id, user_item_id_1: user_items[0].id, user_item_id_2: user_items[1].id)
 puts 'Data seeded!';
