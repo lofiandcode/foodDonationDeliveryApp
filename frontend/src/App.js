@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 // import logo from './logo.svg';
 import './App.css';
 import UserView from './views/UserView';
@@ -54,8 +55,8 @@ class App extends Component {
     const destinationD = this.state.users[21].location.address;
     const destinationE = this.state.users[23].location.address;
 
-    const service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix(
+    // const service = new google.maps.DistanceMatrixService();
+    this.props.google.maps.DistanceMatrixService(
       {
         origins: [origin1],
         destinations: [destinationA, destinationB, destinationC, destinationD, destinationE],
@@ -69,6 +70,11 @@ class App extends Component {
   }
   handleAPIResponse = (response, status) => {
     console.log('Distance API response = ', response)
+    if (status === 'OK') {
+      //do something
+    } else {
+      console.error(err, 'status: ', status)
+    }
   }
 
   getUsers = (callback = ()=>console.log('')) => {
@@ -354,4 +360,6 @@ class App extends Component {
   }
 }
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey: (REACT_APP_API_KEY)
+})(App);
