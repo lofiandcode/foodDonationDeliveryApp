@@ -1,0 +1,26 @@
+1. filter all items for the one that match the newDonation
+2. filter all items' users for the ones that are food banks
+3. save to const needFoodBanks and sort so in order of closest
+   food bank to furthest away.
+4. filter all driver's locations that are in range of donor
+5. save to const possibleDrivers
+6. check distance for each possibleDrivers' location to each 
+   needFoodBanks
+7. From this return an array of objects the object of the food bank
+   and the distance from driver location
+8. filter these arrays for object containing distances that are
+   outside the driver's milesFrom
+9. Remove from possibleDrivers any driver whose array of distance
+   objects is empty after filter
+10. The array of food bank distances should still be in the same
+    closest to furthest from the donor order, so return the object
+    in the 0 index location as the match.
+11. Return each of the drivers left with their match food bank
+12. Save the matches to the match table.
+13. Each associated with these matches should have these matches
+    displayed on their profile.
+14. A button should be on the driver's profile so they can accept
+    the delivery.
+15. Matches show be displayed on the map page as well.
+16. (Stretch) Once one driver accepts, it should disappear from the other
+    drivers' profiles.

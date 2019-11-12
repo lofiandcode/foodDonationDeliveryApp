@@ -14,17 +14,17 @@ Location.create({
 })
 Location.create({
     name: 'Knut Knutsen',
-    address: '',
-    lat: 47.667892,
-    lng: -122.367203,
-    milesFrom: 10.0
+    address: '888 Harrison St, Seattle, WA 98109',
+    lat: 0,
+    lng: 0,
+    milesFrom: 1.1
 })
 Location.create({
     name: 'Jane Doe',
-    address: '',
-    lat: 47.544682,
-    lng: -122.321965,
-    milesFrom: 10.0
+    address: '327 19th Ave E, Seattle, WA 98112',
+    lat: 0,
+    lng: 0,
+    milesFrom: 1.7
 })
 #
 #This line starts real Food Bank seed data
@@ -224,6 +224,13 @@ Location.create({
     lat: 0,
     lng: 0,
     milesFrom: 0
+})
+Location.create({
+    name: 'John Doe',
+    address: '501 Denny Way, Seattle, WA 98109',
+    lat: 0,
+    lng: 0,
+    milesFrom: 0.6
 })
 
 
