@@ -180,7 +180,12 @@ class App extends Component {
     console.log('In sortFoodBanksByDistanceFromCurrentUser()')
     console.log('this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
     console.log('distanceMatrix = ', distanceMatrix);
-    
+    const distances = distanceMatrix.rows[0].elements.map(element => {
+      const length = element.distance.text.length
+      const distance = element.distance.text.slice(1,length-3)
+      return parseFloat(distance)
+    })
+    console.log(distances)
   }
   getFoodBanks = () => {
     const foodBands = this.state.users.filter(user => user.role === 'food bank')
