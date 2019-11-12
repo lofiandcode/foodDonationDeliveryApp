@@ -30,7 +30,9 @@ class App extends Component {
         testFoodBank: '',
         testItem: '',
         donationNeededFoodBanks: [],
-        foodBankDistancesToDonor: []
+        foodBankDistancesToDonor: [],
+        drivers: [],
+        driverDistancesToDonor: []
     }
   }
   componentDidMount() {
@@ -183,12 +185,16 @@ class App extends Component {
     console.log('distanceMatrix = ', distanceMatrix);
     const distances = this.parseDistanceDataOneOrigin(distanceMatrix)
     console.log(distances)
-    const foodBankDistances = []
-    this.state.donationNeededFoodBanks.forEach((foodBank, idx) => {
-      foodBankDistances.push({foodBank: foodBank, distanceToDonor: distances[idx]})
-    })
+    const foodBankDistances = this.createUserDistancesObjects(this.state.donationNeededFoodBanks, distances, 'distanceToDonor')
     console.log('foodBankDistances',foodBankDistances)
     this.setState({foodBankDistancesToDonor: foodBankDistances},() => this.findDriversDistancesToDonor())
+  }
+  createUserDistancesObjects = (arrayOfUsers, arrayOfDistances, distanceTo) => {
+    const result = [];
+    arrayOfUsers.forEach((user, idx) => {
+      result.push({[user.role]: user, [distanceTo]: arrayOfDistances[idx]})
+    })
+    return result;
   }
   parseDistanceDataOneOrigin = (distanceMatrix) => {
     return distanceMatrix.rows[0].elements.map(element => {
@@ -218,12 +224,16 @@ class App extends Component {
     const driversLocations = drivers.map(driver => driver.locations[0].address)
     console.log('driversLocations = ', driversLocations)
     console.log('currentUserLOcation= ', this.state.currentUser.locations[0].address)
-    this.callDistanceAPI(driversLocations, [this.state.currentUser.locations[0].address], this.saveDriversDistancesToFoodBanks )
+    this.setState({drivers: drivers},this.callDistanceAPI(driversLocations, [this.state.currentUser.locations[0].address], this.saveDriversDistancesToDonor));
   }
-  saveDriversDistancesToFoodBanks = (distanceMatrix) => {
+  saveDriversDistancesToDonor = (distanceMatrix) => {
     console.log('distanceMatrix = ', distanceMatrix)
     const distances = this.parseDistanceDataOneDestination(distanceMatrix)
     console.log('distances = ', distances)
+    console.log('drivers = ', this.state.drivers)
+    const driverDistancesToDonor = this.createUserDistancesObjects(this.state.drivers, distances, 'distanceToDonor')
+    console.log('driverDistancesToDonor = ', driverDistancesToDonor)
+    this.setState({ driverDistancesToDonor }, () => console.log('this.state.driverDistancesToDonor = ', this.state.driverDistancesToDonor))
   }
 
 
