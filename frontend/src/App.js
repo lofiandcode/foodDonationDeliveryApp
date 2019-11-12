@@ -25,59 +25,61 @@ class App extends Component {
         newDonation: '',
         loggedIn: false,
         loginError: false,
-        testDriver: {},
-        testDonor: {},
-        testFoodBank: {},
-        testItem: {},
+        testDriver: '',
+        testDonor: '',
+        testFoodBank: '',
+        testItem: '',
+        donationNeededFoodBanks: []
     }
   }
   componentDidMount() {
-      // this.getUsers();
+      this.getUsers();
       // console.log('About to fetch')
       // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
       // +Seattle,+WA+98101&key=${REACT_APP_API_KEY}`)
       // .then(response => response.json())
       // .then(data => console.log('Geocode API response = ', data))
       // console.log("currentUser = ", this.state.currentUser)
-      this.distanceAPITest();
+      // this.distanceAPITest();
   }
 
   distanceAPITest = () => {
     this.getUsers(this.callDistanceAPI)
   }
 
-  callDistanceAPI = () => {
-    console.log('ABOUT TO CALL DISTANCE API')
+  callDistanceAPI = (origins, destinations, callback = () => console.log('')) => {
     // console.log('users[0].location = ',this.state.users[0].locations[0].address)
     // console.log('users[12].location.address = ',this.state.users[12].locations[0].address)
     // console.log('users[18].location.address = ',this.state.users[18].locations[0].address)
     // console.log('users[20].location.address = ',this.state.users[20].locations[0].address)
     // console.log('users[21].location.address = ',this.state.users[21].locations[0].address)
     // console.log('users[23].location.address = ',this.state.users[23].locations[0].address)
-    const origin1 = this.state.users[0].locations[0].address;
-    const destinationA = this.state.users[12].locations[0].address;
-    const destinationB = this.state.users[18].locations[0].address;
-    const destinationC = this.state.users[20].locations[0].address;
-    const destinationD = this.state.users[21].locations[0].address;
-    const destinationE = this.state.users[23].locations[0].address;
+    // const origin1 = this.state.users[0].locations[0].address;
+    // const destinationA = this.state.users[12].locations[0].address;
+    // const destinationB = this.state.users[18].locations[0].address;
+    // const destinationC = this.state.users[20].locations[0].address;
+    // const destinationD = this.state.users[21].locations[0].address;
+    // const destinationE = this.state.users[23].locations[0].address;
     // const origins = [origin1];
     // const destinations = [destinationA, destinationB, destinationC, destinationD, destinationE];
     // const travelMode = 'DRIVING';
+    console.log('ABOUT TO CALL DISTANCE API')
     const service = new this.props.google.maps.DistanceMatrixService();
     service.getDistanceMatrix(
       {
-        origins: [origin1],
-        destinations: [destinationA, destinationB, destinationC, destinationD, destinationE],
+        origins: origins,
+        destinations: destinations,
         travelMode: 'DRIVING',
         avoidHighways: false,
         avoidTolls: false,
         unitSystem: window.google.maps.UnitSystem.IMPERIAL
-      }, this.handleAPIResponse);
+      }, (response, status) => this.handleAPIResponse(response, status, callback));
   }
-  handleAPIResponse = (response, status) => {
+  handleAPIResponse = (response, status,callback = () => console.log('')) => {
     console.log('Distance API response = ', response)
+    console.log('status = ', status)
     if (status === 'OK') {
-      //do something
+      callback(response);
     } else {
       console.log('status: ', status)
     }
@@ -158,16 +160,26 @@ class App extends Component {
   }
 
   getFoodBanksThatNeedDonation = (user_item) => {
-    console.log('In findItemsThatMatchDonation user_item = ', user_item)
+    console.log('In getFoodBanksThatNeedDonation user_item = ', user_item)
     const donation = user_item.item.name
     console.log('donation = ', donation)
     console.log('Users = ', this.state.users)
     const foodBanks = this.getFoodBanks()
+    console.log('foodBanks = ', foodBanks)
     const donationNeededFoodBanks = foodBanks.filter(foodBank => {
       const matchedItems = foodBank.items.filter(item => item.name === donation)
       return matchedItems.length > 0; 
     })
     console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
+    const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address)
+    console.log('foodBankAddresses = ', foodBankAddresses)
+    this.setState({donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.sortFoodBanksByDistanceFromCurrentUser));
+  }
+  sortFoodBanksByDistanceFromCurrentUser = (distanceMatrix) => {
+    console.log('In sortFoodBanksByDistanceFromCurrentUser()')
+    console.log('this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
+    console.log('distanceMatrix = ', distanceMatrix);
+    
   }
   getFoodBanks = () => {
     const foodBands = this.state.users.filter(user => user.role === 'food bank')
@@ -388,5 +400,5 @@ class App extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'API Key'
+  apiKey: 'AIzaSyBI97S736ObZYnPmLXO_6HNqiwRIB82jdo'
 })(App);
