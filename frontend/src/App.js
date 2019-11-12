@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {GoogleApiWrapper} from 'google-maps-react';
 // import logo from './logo.svg';
 import './App.css';
 import UserView from './views/UserView';
@@ -11,7 +11,7 @@ import CreateProfileView from './views/CreateProfileView';
 import AddressView from './views/AddressView';
 require("dotenv").config()
 
-const REACT_APP_API_KEY = process.env.REACT_APP_API_KEY;
+// const REACT_APP_API_KEY = process.env.REACT_APP_API_KEY;
 
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import NavBar from './containers/NavBar';
@@ -48,24 +48,30 @@ class App extends Component {
 
   callDistanceAPI = () => {
     console.log('ABOUT TO CALL DISTANCE API')
-    const origin1 = this.state.users[0].location.address;
-    const destinationA = this.state.users[12].location.address;
-    const destinationB = this.state.users[18].location.address;
-    const destinationC = this.state.users[20].location.address;
-    const destinationD = this.state.users[21].location.address;
-    const destinationE = this.state.users[23].location.address;
-
-    // const service = new google.maps.DistanceMatrixService();
-    this.props.google.maps.DistanceMatrixService(
+    // console.log('users[0].location = ',this.state.users[0].locations[0].address)
+    // console.log('users[12].location.address = ',this.state.users[12].locations[0].address)
+    // console.log('users[18].location.address = ',this.state.users[18].locations[0].address)
+    // console.log('users[20].location.address = ',this.state.users[20].locations[0].address)
+    // console.log('users[21].location.address = ',this.state.users[21].locations[0].address)
+    // console.log('users[23].location.address = ',this.state.users[23].locations[0].address)
+    const origin1 = this.state.users[0].locations[0].address;
+    const destinationA = this.state.users[12].locations[0].address;
+    const destinationB = this.state.users[18].locations[0].address;
+    const destinationC = this.state.users[20].locations[0].address;
+    const destinationD = this.state.users[21].locations[0].address;
+    const destinationE = this.state.users[23].locations[0].address;
+    // const origins = [origin1];
+    // const destinations = [destinationA, destinationB, destinationC, destinationD, destinationE];
+    // const travelMode = 'DRIVING';
+    const service = new this.props.google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
       {
         origins: [origin1],
         destinations: [destinationA, destinationB, destinationC, destinationD, destinationE],
         travelMode: 'DRIVING',
-        transitOptions: TransitOptions,
-        drivingOptions: DrivingOptions,
-        unitSystem: UnitSystem,
-        avoidHighways: Boolean,
-        avoidTolls: Boolean,
+        avoidHighways: false,
+        avoidTolls: false,
+        unitSystem: window.google.maps.UnitSystem.IMPERIAL
       }, this.handleAPIResponse);
   }
   handleAPIResponse = (response, status) => {
@@ -73,7 +79,7 @@ class App extends Component {
     if (status === 'OK') {
       //do something
     } else {
-      console.error(err, 'status: ', status)
+      console.log('status: ', status)
     }
   }
 
@@ -93,10 +99,10 @@ class App extends Component {
       .then(callback)
       .catch(err=>console.log(err))
   }
-  resetUsersAndDonation = () => {
+  resetUsersAndDonation = (callback = ()=>console.log('')) => {
     // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
     // console.log('In resetUsers() and about to reset users')
-      this.getUsers();
+      this.getUsers(callback);
       this.setState({newDonation: ''})
   }
   setCurrentUser = (username, password) => {
@@ -143,12 +149,32 @@ class App extends Component {
               }
           })
       })
-      .then(() => this.clearForm())
+      .then(resp => resp.json())
+      .then(data => this.resetUsersAndDonation(() => this.getFoodBanksThatNeedDonation(data)))
       .catch(err => alert(err.message));
       // .then(response => response.json())
       // .then(json => console.log('join post = ', json))
 
   }
+
+  getFoodBanksThatNeedDonation = (user_item) => {
+    console.log('In findItemsThatMatchDonation user_item = ', user_item)
+    const donation = user_item.item.name
+    console.log('donation = ', donation)
+    console.log('Users = ', this.state.users)
+    const foodBanks = this.getFoodBanks()
+    const donationNeededFoodBanks = foodBanks.filter(foodBank => {
+      const matchedItems = foodBank.items.filter(item => item.name === donation)
+      return matchedItems.length > 0; 
+    })
+    console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
+  }
+  getFoodBanks = () => {
+    const foodBands = this.state.users.filter(user => user.role === 'food bank')
+    return foodBands
+  }
+
+
   joinLocationAndCurrentUser = (location) => {
     // console.log('currentUser.id = ', this.state.currentUser.id)
     // console.log('location.id = ', location.id)
@@ -170,28 +196,29 @@ class App extends Component {
     // .then(response => response.json())
 
 }
-  clearForm = () => {
-      // console.log('In ClearForm user_item = ', user_item)
-      // console.log('clearForm users = ', this.state.users);
-      this.setState({
-          testDriver: {
-          name: 'John Doe',
-          phoneNum: '(206) 555-5555'
-          },
-          testDonor: {
-          name: 'Icicle Seafoods',
-          address: "4019 21st Ave W, Seattle, WA 98199"
-          },
-          testFoodBank: {
-          name: 'Ballard Food Bank',
-          address: '5130 Leary Ave NW, Seattle, WA 98107'
-          },
-          testItem: {
-          name: this.state.newDonation
-          }
-      }, () => this.resetUsersAndDonation())
+  // clearForm = () => {
+  //     // console.log('In ClearForm user_item = ', user_item)
+  //     // console.log('clearForm users = ', this.state.users);
+  //     // this.setState({
+  //     //     testDriver: {
+  //     //     name: 'John Doe',
+  //     //     phoneNum: '(206) 555-5555'
+  //     //     },
+  //     //     testDonor: {
+  //     //     name: 'Icicle Seafoods',
+  //     //     address: "4019 21st Ave W, Seattle, WA 98199"
+  //     //     },
+  //     //     testFoodBank: {
+  //     //     name: 'Ballard Food Bank',
+  //     //     address: '5130 Leary Ave NW, Seattle, WA 98107'
+  //     //     },
+  //     //     testItem: {
+  //     //     name: this.state.newDonation
+  //     //     }
+  //     // },() =>  )
+  //     this.resetUsersAndDonation()
       
-  }
+  // }
 
   // handleFormChange = (event) => {
   //   event.preventDefault();
@@ -361,5 +388,5 @@ class App extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: (REACT_APP_API_KEY)
+  apiKey: 'API Key'
 })(App);

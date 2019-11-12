@@ -8,6 +8,10 @@ require 'faker'
 #     phoneNum: '(206) 282-0988',
 #     about: Faker::Lorem.paragraph(sentence_count: 45)
 # })
+
+#Driver 1 address = 888 Harrison St, Seattle, WA 98109 - milesFrom: 1.1
+#Driver 2 address = 327 19th Ave E, Seattle, WA 98112 - milesFrom: 1.7
+#Driver 3 address = 501 Denny Way, Seattle, WA 98109 - milesFrom: 0.6
 User.create({
     name: 'Whole Foods Market',
     username: 'Whole Foods Market',
@@ -25,10 +29,6 @@ User.create({
     phoneNum: '(206) 555-5555',
     about: 'I like lamp.'
 })
-# areas: [{
-#     coordinates: {lat: 47.667892, lng: -122.367203}, 
-#     milesFrom: 10
-# }],
 
 User.create({
     name: 'Jane Doe',
@@ -38,11 +38,6 @@ User.create({
     phoneNum: '(206) 555-6666',
     about: 'Glory to the Sundori.'
 })
-# areas: [{
-#     coordinates: {lat: 47.544682, lng: -122.321965},
-#     milesFrom: 10
-# }],
-
 
 #
 #This line starts real Food Bank seed data
@@ -376,3 +371,11 @@ User.create({
     phoneNum: '(206) 957-2020',
     
 });
+User.create({
+    name: 'John Doe',
+    username: 'John Doe',
+    password: '1234',
+    role: 'driver',
+    phoneNum: '(206) 555-6777',
+    about: 'Glory to the Sundori.'
+})
