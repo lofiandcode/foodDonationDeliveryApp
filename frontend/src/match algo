@@ -1,9 +1,11 @@
 ##Start this process after user-item join
 1.X filter all items for the one that match the newDonation
 2.X filter all items' users for the ones that are food banks
-3. save to const needFoodBanks and sort so in order of closest
-   food bank to furthest away.
+3.X save to const needFoodBanks 
 4. filter all driver's locations that are in range of donor
+    - get all drivers
+    - get distances from drivers to donor
+    - filter out the drivers that are outside their milesFrom
 5. save to const possibleDrivers
 6. check distance for each possibleDrivers' location to each 
    needFoodBanks

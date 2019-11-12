@@ -29,7 +29,8 @@ class App extends Component {
         testDonor: '',
         testFoodBank: '',
         testItem: '',
-        donationNeededFoodBanks: []
+        donationNeededFoodBanks: [],
+        foodBankDistancesToDonor: []
     }
   }
   componentDidMount() {
@@ -174,22 +175,55 @@ class App extends Component {
     console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
     const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address)
     console.log('foodBankAddresses = ', foodBankAddresses)
-    this.setState({donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.sortFoodBanksByDistanceFromCurrentUser));
+    this.setState({donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.saveFoodBankDistancesToDonor));
   }
-  sortFoodBanksByDistanceFromCurrentUser = (distanceMatrix) => {
+  saveFoodBankDistancesToDonor = (distanceMatrix) => {
     console.log('In sortFoodBanksByDistanceFromCurrentUser()')
     console.log('this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
     console.log('distanceMatrix = ', distanceMatrix);
-    const distances = distanceMatrix.rows[0].elements.map(element => {
+    const distances = this.parseDistanceDataOneOrigin(distanceMatrix)
+    console.log(distances)
+    const foodBankDistances = []
+    this.state.donationNeededFoodBanks.forEach((foodBank, idx) => {
+      foodBankDistances.push({foodBank: foodBank, distanceToDonor: distances[idx]})
+    })
+    console.log('foodBankDistances',foodBankDistances)
+    this.setState({foodBankDistancesToDonor: foodBankDistances},() => this.findDriversDistancesToDonor())
+  }
+  parseDistanceDataOneOrigin = (distanceMatrix) => {
+    return distanceMatrix.rows[0].elements.map(element => {
       const length = element.distance.text.length
       const distance = element.distance.text.slice(1,length-3)
       return parseFloat(distance)
     })
-    console.log(distances)
+  }
+  parseDistanceDataOneDestination = (distanceMatrix) => {
+    return distanceMatrix.rows.map(row => {
+      const length = row.elements[0].distance.text.length
+      const distance = row.elements[0].distance.text.slice(1,length-3)
+      return parseFloat(distance)
+    })
   }
   getFoodBanks = () => {
     const foodBands = this.state.users.filter(user => user.role === 'food bank')
     return foodBands
+  }
+  getDrivers = () => {
+    const drivers = this.state.users.filter(user => user.role === 'driver')
+    return drivers
+  }
+  findDriversDistancesToDonor = () => {
+    const drivers = this.getDrivers()
+    // console.log('drivers = ', drivers)
+    const driversLocations = drivers.map(driver => driver.locations[0].address)
+    console.log('driversLocations = ', driversLocations)
+    console.log('currentUserLOcation= ', this.state.currentUser.locations[0].address)
+    this.callDistanceAPI(driversLocations, [this.state.currentUser.locations[0].address], this.saveDriversDistancesToFoodBanks )
+  }
+  saveDriversDistancesToFoodBanks = (distanceMatrix) => {
+    console.log('distanceMatrix = ', distanceMatrix)
+    const distances = this.parseDistanceDataOneDestination(distanceMatrix)
+    console.log('distances = ', distances)
   }
 
 
