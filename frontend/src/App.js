@@ -33,7 +33,8 @@ class App extends Component {
         foodBankDistancesToDonor: [],
         drivers: [],
         driverDistancesToDonor: [],
-        possiblDrivers: []
+        possiblDrivers: [],
+        matches: []
     }
   }
   componentDidMount() {
@@ -296,6 +297,10 @@ class App extends Component {
       return objResult
     })
     console.log("filterResult = ", filterResult)
+
+    const matches = filterResult.filter(obj => obj.distancesToFoodBanks.length > 0)
+    // console.log('****MATCHES**** = ', matches)
+    this.setState({matches}, () => console.log('this.state.matches = ', this.state.matches))
     //********************************* */
     //Okay distanceResultObj has the right distances with the right driver.
     //Now you just have to filter our the distances that aren't in drivers range
