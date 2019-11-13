@@ -29,6 +29,7 @@ class App extends Component {
         testDonor: '',
         testFoodBank: '',
         testItem: '',
+        donorUserItem: {},
         donationNeededFoodBanks: [],
         foodBankDistancesToDonor: [],
         drivers: [],
@@ -107,6 +108,22 @@ class App extends Component {
       .then(callback)
       .catch(err=>console.log(err))
   }
+  getUserItems = (callback = ()=>console.log('')) => {
+    fetch("http://localhost:3000/api/v1/user_items")
+    .then(resp => resp.json())
+    .then(data => {
+        this.setState({
+            user_items: data
+        });
+    })
+    .then(() => {
+      if (this.state.currentUser !== {}) {
+        this.setCurrentUser(this.state.currentUser.username, this.state.currentUser.password)
+      }
+    })
+    .then(callback)
+    .catch(err=>console.log(err))
+}
   resetUsersAndDonation = (callback = ()=>console.log('')) => {
     // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
     // console.log('In resetUsers() and about to reset users')
@@ -180,7 +197,7 @@ class App extends Component {
     console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
     const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address)
     console.log('foodBankAddresses = ', foodBankAddresses)
-    this.setState({donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.saveFoodBankDistancesToDonor));
+    this.setState({donorUserItem: user_item, donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.saveFoodBankDistancesToDonor));
   }
   saveFoodBankDistancesToDonor = (distanceMatrix) => {
     console.log('In sortFoodBanksByDistanceFromCurrentUser()')
@@ -248,28 +265,28 @@ class App extends Component {
     this.setState({possiblDrivers}, () => this.findPossibleDriverDistancesToFoodBanks())
   }
   findPossibleDriverDistancesToFoodBanks = () => {
-    console.log('In findPossibleDriverDistancesToFoodBanks')
+    // console.log('In findPossibleDriverDistancesToFoodBanks')
     const drivers = [...this.state.possiblDrivers]
     const foodBanks = [...this.state.donationNeededFoodBanks]
-    console.log('drivers = ', drivers)
-    console.log('foodBanks = ', foodBanks)
+    // console.log('drivers = ', drivers)
+    // console.log('foodBanks = ', foodBanks)
     // console.log('drivers = ', drivers)
     const driversLocations = drivers.map(obj => obj.driver.locations[0].address)
     const foodBanksLocations = foodBanks.map(foodBank => foodBank.locations[0].address)
-    console.log('driversLocations = ', driversLocations)
-    console.log('foodBanksLocations = ', foodBanksLocations)
+    // console.log('driversLocations = ', driversLocations)
+    // console.log('foodBanksLocations = ', foodBanksLocations)
     this.callDistanceAPI(driversLocations, foodBanksLocations, this.filterDriversDistancesToFoodBanks)
   }
   filterDriversDistancesToFoodBanks = (distanceMatrix) => {
-    console.log('***ATTENTION*** IN filterDriversDistancesToFoodBanks')
-    console.log('this.state = ', this.state )
-    console.log('distanceMatrix = ', distanceMatrix)
+    // console.log('***ATTENTION*** IN filterDriversDistancesToFoodBanks')
+    // console.log('this.state = ', this.state )
+    // console.log('distanceMatrix = ', distanceMatrix)
     const possibleDrivers = [...this.state.possiblDrivers]
     const drivers = possibleDrivers.map(obj => obj.driver)
-    console.log('possibleDrivers = ', drivers)
+    // console.log('possibleDrivers = ', drivers)
     let tempObj = {};
     let tempDistances = []
-    console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
+    // console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
     // const donationNeededFoodBanks = [...this.state.donationNeededFoodBanks];
     // console.log('foodBanks = ', donationNeededFoodBanks)
     console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
@@ -280,27 +297,30 @@ class App extends Component {
         return {foodBank: {...foodBank}, distanceToFoodBank: tempDistances[idx]}
       })
       tempObj = {driver: driverObj, distancesToFoodBanks: foodBankDistancesObjects}
-      console.log('tempObj = ', tempObj)
+      // console.log('tempObj = ', tempObj)
       return tempObj
     })
-    console.log('***ATTENTION*** distanceResultsObj = ',distanceResultsObj)
+    // console.log('***ATTENTION*** distanceResultsObj = ',distanceResultsObj)
 
     const filterResult = distanceResultsObj.map(obj => {
-      console.log('STARTING NEXT distanceResultsObj MAP') 
-      console.log('obj = ', obj)
-      console.log('obj.distancesToFoodBanks = ',obj.distancesToFoodBanks)
+      // console.log('STARTING NEXT distanceResultsObj MAP') 
+      // console.log('obj = ', obj)
+      // console.log('obj.distancesToFoodBanks = ',obj.distancesToFoodBanks)
       const distances = [...obj.distancesToFoodBanks]
       const milesFrom = obj.driver.locations[0].milesFrom
       const temp = distances.filter(distanceObj => distanceObj.distanceToFoodBank <= milesFrom)
-      console.log('FILTER RESULT temp = ', temp)
+      // console.log('FILTER RESULT temp = ', temp)
       const objResult = {...obj, distancesToFoodBanks: temp}
       return objResult
     })
-    console.log("filterResult = ", filterResult)
+    // console.log("filterResult = ", filterResult)
 
     const matches = filterResult.filter(obj => obj.distancesToFoodBanks.length > 0)
-    // console.log('****MATCHES**** = ', matches)
-    this.setState({matches}, () => console.log('this.state.matches = ', this.state.matches))
+    console.log('****MATCHES**** = ', matches)
+    this.setState({matches}, () => this.saveMatchesToDB())
+
+    
+
     //********************************* */
     //Okay distanceResultObj has the right distances with the right driver.
     //Now you just have to filter our the distances that aren't in drivers range
@@ -310,6 +330,44 @@ class App extends Component {
     // const distancesIdx1 = this.parseDistanceDataOneOrigin(distanceMatrix, 1)
     // console.log('distancesIdx0 = ', distancesIdx0)
     // console.log('distancesIdx1 = ', distancesIdx1)
+  }
+  saveMatchesToDB = () => {
+    console.log('this.state = ', this.state)
+    this.state.matches.forEach((match, idx) => {
+      match.distancesToFoodBanks.forEach(obj => {
+        // console.log(`STARTING INNER forEACH ${idx}`)
+        // console.log('driver id = ', match.driver.id)
+        // console.log('donor_user_item id = ', this.state.donorUserItem.id)
+        // console.log('foodBank id = ', obj.foodBank.id)
+        // console.log('ABOUT TO POST TO MATCH TABLE')
+        this.postToMatchTable(match.driver.id, this.state.donorUserItem.id, obj.foodBank.id, false, false)
+        // console.log(`ENDING INNER forEACH ${idx}`)
+      })
+    })
+    this.getUserItems()
+  }
+
+  postToMatchTable = (driver_user_id, donor_user_item_id, food_bank_user_id, completed = false, accepted = false) => {
+    fetch('http://localhost:3000/api/v1/matches', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            match: {
+              driver_user_id,
+              donor_user_item_id,
+              food_bank_user_id,
+              completed,
+              accepted
+            }
+        })
+    })
+    .then(response => response.json())
+    .then(data => console.log('Match Table response = ', data))
+    .then(() => this.getUserItems())
+    // .catch(err => alert(err.message));
   }
   // saveDriversDistancesToFoodBanks = (distanceMatrix) => {
   //   console.log('IN saveDriversDistancesToFoodBanks')

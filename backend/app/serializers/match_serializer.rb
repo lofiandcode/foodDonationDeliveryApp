@@ -1,3 +1,3 @@
 class MatchSerializer < ActiveModel::Serializer
-  attributes :id, :completed, :user_id, :user_item_id_1, :user_item_id_2
+  attributes :id, :completed, :accepted, :driver_user_id, :donor_user_item_id, :food_bank_user_id
 end
