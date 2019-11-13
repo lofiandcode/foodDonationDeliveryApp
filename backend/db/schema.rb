@@ -36,9 +36,10 @@ ActiveRecord::Schema.define(version: 2019_11_10_192220) do
 
   create_table "matches", force: :cascade do |t|
     t.boolean "completed"
-    t.integer "user_id"
-    t.integer "user_item_id_1"
-    t.integer "user_item_id_2"
+    t.boolean "accepted"
+    t.integer "driver_user_id"
+    t.integer "donor_user_item_id"
+    t.integer "food_bank_user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

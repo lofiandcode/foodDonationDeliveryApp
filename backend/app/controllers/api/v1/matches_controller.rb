@@ -23,6 +23,6 @@ class Api::V1::MatchesController < ApplicationController
     end
 
     def match_params
-        params.require(:match).permit(:id, :completed, :user_id, :user_item_id_1, :user_item_id_2)
+        params.require(:match).permit(:id, :completed, :accepted, :driver_user_id, :donor_user_item_id, :food_bank_user_id)
     end
 end

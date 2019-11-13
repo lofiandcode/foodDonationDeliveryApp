@@ -34,5 +34,5 @@ UserItem.create(user_id: users[23].id, item_id: items[2].id);
 
 # user_items = UserItem.all;
 
-# match = Match.create(completed: false, user_id: users[1].id, user_item_id_1: user_items[0].id, user_item_id_2: user_items[1].id)
+
 puts 'Data seeded!';
