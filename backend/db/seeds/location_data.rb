@@ -24,7 +24,7 @@ Location.create({
     address: '327 19th Ave E, Seattle, WA 98112',
     lat: 0,
     lng: 0,
-    milesFrom: 1.7
+    milesFrom: 1.6
 })
 #
 #This line starts real Food Bank seed data
