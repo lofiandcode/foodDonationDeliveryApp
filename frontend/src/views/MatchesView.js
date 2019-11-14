@@ -15,7 +15,7 @@ Geocode.setLanguage("en");
 
 const mapStyles = {
     width: '100%',
-    height: '100%',
+    height: '90%',
 };
 
 class MatchesView extends Component {
@@ -255,9 +255,9 @@ class MatchesView extends Component {
                 />
                 <Map
                     google={this.props.google}
-                    zoom={13}
+                    zoom={14}
                     style={mapStyles}
-                    initialCenter={{lat: 47.618475, lng: -122.337975}}
+                    initialCenter={{lat: 47.616280, lng: -122.328375}}
                 >
                     {this.displayDonorMarkers()}
                     {/*this.displayDriverMarkers()*/}
