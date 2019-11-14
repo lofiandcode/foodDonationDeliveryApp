@@ -9,6 +9,7 @@ import LoginView from './views/LoginView';
 import UserEditView from './views/UserEditView';
 import CreateProfileView from './views/CreateProfileView';
 import AddressView from './views/AddressView';
+import MatchesView from './views/MatchesView';
 require("dotenv").config()
 
 const REACT_APP_API_KEY = process.env.REACT_APP_API_KEY;
@@ -40,7 +41,7 @@ class App extends Component {
   }
   componentDidMount() {
       this.getUsers();
-      console.log(REACT_APP_API_KEY)
+      // console.log(REACT_APP_API_KEY)
       // console.log('About to fetch')
       // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
       // +Seattle,+WA+98101&key=${REACT_APP_API_KEY}`)
@@ -607,6 +608,12 @@ class App extends Component {
                 testFoodBank={this.state.testFoodBank} 
                 testItem={this.state.testItem}
               />
+            }
+          />
+          <Route
+            exact path="/matches"
+            render={() => 
+              <MatchesView />
             }
           />
           <Route

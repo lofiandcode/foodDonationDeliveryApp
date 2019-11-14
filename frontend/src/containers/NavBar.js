@@ -26,9 +26,11 @@ export default class NavBar extends Component {
             to='/profile'
           />
           <Menu.Item
-            name='areas'
-            active={activeItem === 'areas'}
+            name='matches'
+            active={activeItem === 'matches'}
             onClick={this.handleItemClick}
+            as={ Link }
+            to='/matches'
           />
           <Menu.Item
             name='edit profile'
