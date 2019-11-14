@@ -140,22 +140,6 @@ class MatchesView extends Component {
                 console.error(error);
             }
         );
-
-        // const geocoder = new this.props.google.maps.Geocoder()
-        // geocoder.geocode({address: this.state.matchesWithObjs[match_idx].driver.locations[location_idx].address}, (response, status) => {
-        //     console.log('driver gecode response = ', response)
-        //     if (status === 'OK') {
-        //         console.log('Geocoder lat = ', response[0].geometry.viewport.na.l)
-        //         console.log('Geocoder lng = ', response[0].geometry.viewport.ga.l)
-        //         this.setState(prevState => ({
-        //             matchesWithObjs: prevState.matchesWithObjs.map(
-        //                 (el,idx) => idx === match_idx? { ...el, driverLatLng: {lat: response[0].geometry.viewport.na.l, lng: response[0].geometry.viewport.ga.l}}: el
-        //             )
-        //         }), () => console.log('state.matchesWithObjs = ', this.state.matchesWithObjs))
-        //     } else {
-        //         alert('Geocode was not successful for the following reason: ' + status);
-        //     }
-        // })
     }
     geocodeAddressAndSetStateOfFoodBank = (match_idx, location_idx) => {
         console.log('IN GECODE FOOD BANK AND STATE ADDRESS RETURNED IS = ', this.state.matchesWithObjs[match_idx].foodBank.locations[location_idx].address)
@@ -200,10 +184,11 @@ class MatchesView extends Component {
                 console.log('IN SECOND CONDITIONAL this.state.matchesWithObjs[0].donorLatLng = ', this.state.matchesWithObjs[0].donorLatLng)
                 return this.state.matchesWithObjs.map((match, index) => {
                     return <Marker key={index} id={index} position={{
-                    lat: match.donorLatLng.lat,
-                    lng: match.donorLatLng.lng
-                }}
-                onClick={() => console.log("You clicked me!")} />
+                                lat: match.donorLatLng.lat,
+                                lng: match.donorLatLng.lng
+                            }}
+                            onClick={() => console.log("You clicked me!")} 
+                            animation={this.props.google.maps.Animation.DROP}/>
                 })
             } else {
                 return null
@@ -214,23 +199,49 @@ class MatchesView extends Component {
     }
     displayDriverMarkers = () => {
         // console.log('Matches in displayMatches = ', this.state.locations)
-        return this.state.matchesWithObjs.map((match, index) => {
-            return <Marker key={index} id={index} position={{
-             lat: match.driverLatLng.lat,
-             lng: match.driverLatLng.lng
-           }}
-           onClick={() => console.log("You clicked me!")} />
-        })
+        console.log('ABOUT TO CHECK FIRST CONDITIONAL AND this.state.matchesWithObjs = ', this.state.matchesWithObjs)
+        if (this.state.matchesWithObjs.length !== 0 ){
+            // debugger
+            console.log('ABOVE TO CHECK CONDITIONAL AND this.state.matchesWithObjs[0].donorLatLng = ',this.state.matchesWithObjs[0].driverLatLng)
+            if (this.state.matchesWithObjs[0].driverLatLng && this.state.matchesWithObjs[1].driverLatLng) {
+                console.log('IN SECOND CONDITIONAL this.state.matchesWithObjs[0].donorLatLng = ', this.state.matchesWithObjs[0].driverLatLng)
+                return this.state.matchesWithObjs.map((match, index) => {
+                    return <Marker key={index} id={index} position={{
+                                lat: match.driverLatLng.lat,
+                                lng: match.driverLatLng.lng
+                            }}
+                            onClick={() => console.log("You clicked me!")} 
+                            animation={this.props.google.maps.Animation.DROP}/>
+                })
+            } else {
+                return null
+            }
+        } else {
+            return null
+        }
     }
     displayFoodBankMarkers = () => {
         // console.log('Matches in displayMatches = ', this.state.locations)
-        return this.state.matchesWithObjs.map((match, index) => {
-            return <Marker key={index} id={index} position={{
-             lat: match.foodBankLatLng.lat,
-             lng: match.foodBankLatLng.lng
-           }}
-           onClick={() => console.log("You clicked me!")} />
-        })
+        console.log('ABOUT TO CHECK FIRST CONDITIONAL AND this.state.matchesWithObjs = ', this.state.matchesWithObjs)
+        if (this.state.matchesWithObjs.length !== 0 ){
+            // debugger
+            console.log('ABOVE TO CHECK CONDITIONAL AND this.state.matchesWithObjs[0].donorLatLng = ',this.state.matchesWithObjs[0].foodBankLatLng)
+            if (this.state.matchesWithObjs[0].foodBankLatLng && this.state.matchesWithObjs[1].foodBankLatLng) {
+                console.log('IN SECOND CONDITIONAL this.state.matchesWithObjs[0].donorLatLng = ', this.state.matchesWithObjs[0].foodBankLatLng)
+                return this.state.matchesWithObjs.map((match, index) => {
+                    return <Marker key={index} id={index} position={{
+                                lat: match.foodBankLatLng.lat,
+                                lng: match.foodBankLatLng.lng
+                            }}
+                            onClick={() => console.log("You clicked me!")} 
+                            animation={this.props.google.maps.Animation.DROP}/>
+                })
+                } else {
+                    return null
+                }
+            } else {
+                return null
+            }
     }
     render() {
         console.log('Matches props = ', this.props)
@@ -243,9 +254,8 @@ class MatchesView extends Component {
                     initialCenter={{lat: 47.618475, lng: -122.337975}}
                 >
                     {this.displayDonorMarkers()}
-
                     {/*this.displayDriverMarkers()*/}
-                    {/*this.displayFoodBankMarkers()*/}
+                    {this.displayFoodBankMarkers()}
                     {/* <Marker position={{lat: 47.62227910000001, lng: -122.33990849999998}} animation={this.props.google.maps.Animation.DROP}/> */}
                     {/* <Marker position={{lat: 47.618475, lng: -122.337975}} animation={this.props.google.maps.Animation.DROP}/> */}
                 </Map>
