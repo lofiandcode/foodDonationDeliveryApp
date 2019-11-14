@@ -3,7 +3,6 @@ import User from '../components/User';
 import About from '../components/About';
 import DonationsContainer from '../containers/DonationsContainer';
 import Contact from '../components/Contact';
-import MatchContainer from '../containers/MatchContainer';
 
 class UserView extends Component {
 
@@ -54,12 +53,6 @@ class UserView extends Component {
                     handleDonationSubmit={this.props.handleDonationSubmit}
                 />
                 <Contact user={this.props.currentUser}/>
-                <MatchContainer 
-                    driver={this.props.testDriver}
-                    donor={this.props.testDonor}
-                    food_bank={this.props.testFoodBank} 
-                    items={this.props.testItem}
-                />
             </div>
         )       
     };

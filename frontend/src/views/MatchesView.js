@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import Geocode from "react-geocode";
+import MatchContainer from '../containers/MatchContainer';
 require("dotenv").config()
 const REACT_APP_API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -249,6 +250,9 @@ class MatchesView extends Component {
         console.log('Matches props = ', this.props)
         return (
             <Fragment>
+                <MatchContainer 
+                    matches={this.state.matchesWithObjs}
+                />
                 <Map
                     google={this.props.google}
                     zoom={13}

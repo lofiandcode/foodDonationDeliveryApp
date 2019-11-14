@@ -1,31 +1,46 @@
 import React from 'react'
+import MatchCard from '../components/MatchCard';
+import { Button, Modal } from 'semantic-ui-react'
 
 const MatchContainer = (props) => {
-        // console.log('MatchContainer props = ',props)
-        if (props.driver.name) {
-            return (
-                <div>
-                    <h4>Donations Reading for Delivery</h4>
-                    <p>
-                        Donation:<br/>
-                        {props.items.name}<br/><br/>
-                        Driver:<br/>
-                        {props.driver.name}<br/>
-                        {props.driver.phoneNum}<br/><br/>
-                        Pick Up Location:<br/>
-                        {props.donor.name}<br/>
-                        {props.donor.address}<br/><br/>
-                        Deliver Location:<br/>
-                        {props.food_bank.name}<br/>
-                        {props.food_bank.address}
-                    </p>
-                </div>
-            );
-        } else {
-            // console.log('IN esle in match container')
-            return null
-        }
-    
+    console.log('MatchContainer props = ',props)
+    if (props.matches.length !== 0 ) {
+        return (
+            <Modal trigger={<Button>Show Matches</Button>}>
+                <Modal.Header>Donations Reading for Delivery:</Modal.Header>
+                <Modal.Content>
+                <Modal.Description>
+                    <MatchCard matches={props.matches}/>
+                </Modal.Description>
+                </Modal.Content>
+            </Modal>
+        )
+    } else {
+        // console.log('IN esle in match container')
+        return null
+    }
 }
 
 export default MatchContainer
+
+// {/* <Header>Default Profile Image</Header>
+//         <p>
+//           We've found the following gravatar image associated with your e-mail
+//           address.
+//         </p>
+//         <p>Is it okay to use this photo?</p> */}
+
+// const MatchContainer = (props) => {
+//             console.log('MatchContainer props = ',props)
+//             if (props.matches.length !== 0 ) {
+//                 return (
+//                     <MatchCard matches={props.matches}/>
+//                 );
+//             } else {
+//                 // console.log('IN esle in match container')
+//                 return null
+//             }
+        
+//     // }
+    
+//     // export default MatchContainer
