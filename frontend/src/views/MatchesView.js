@@ -76,12 +76,12 @@ class MatchesView extends Component {
         console.log('IN TEST CALL FUNCTION')
         const matches = [...this.state.matchesWithObjs]
         console.log('matches = ', matches)
-        this.testPrintFunctionDonor( matches[0], 0)
-        this.testPrintFunctionDriver( matches[0], 0)
-        this.testPrintFunctionFoodBank( matches[0], 0)
-        this.testPrintFunctionDonor( matches[1], 1)
-        this.testPrintFunctionDriver( matches[1], 1)
-        this.testPrintFunctionFoodBank( matches[1], 1)
+        // this.testPrintFunctionDonor( matches[0], 0)
+        // this.testPrintFunctionDriver( matches[0], 0)
+        // this.testPrintFunctionFoodBank( matches[0], 0)
+        // this.testPrintFunctionDonor( matches[1], 1)
+        // this.testPrintFunctionDriver( matches[1], 1)
+        // this.testPrintFunctionFoodBank( matches[1], 1)
         this.state.matchesWithObjs.map((match, idx) => {
             this.geocodeAddressAndSetStateOfDonor(idx, 0)
             this.geocodeAddressAndSetStateOfDriver(idx, 0)
@@ -187,6 +187,7 @@ class MatchesView extends Component {
                                 lat: match.donorLatLng.lat,
                                 lng: match.donorLatLng.lng
                             }}
+                            label={'A'}
                             onClick={() => console.log("You clicked me!")} 
                             animation={this.props.google.maps.Animation.DROP}/>
                 })
@@ -233,6 +234,7 @@ class MatchesView extends Component {
                                 lat: match.foodBankLatLng.lat,
                                 lng: match.foodBankLatLng.lng
                             }}
+                            label={'B'}
                             onClick={() => console.log("You clicked me!")} 
                             animation={this.props.google.maps.Animation.DROP}/>
                 })
