@@ -73,6 +73,9 @@ class MatchesView extends Component {
         this.testPrintFunctionDonor( matches[1], 1)
         this.testPrintFunctionDriver( matches[1], 1)
         this.testPrintFunctionFoodBank( matches[1], 1)
+        this.geocodeAddressAndSetStateOfDonor(0, 0)
+        this.geocodeAddressAndSetStateOfDriver(0, 0)
+        this.geocodeAddressAndSetStateOfFoodBank(1, 0)
     }
     testPrintFunctionDonor = (match, idx) => {
         console.log(`objType donor_user_item.user.locations[0].address = `, match.donor_user_item.user.locations[0].address)
@@ -98,22 +101,43 @@ class MatchesView extends Component {
     //     })
     // }
     
-    // geocodeAddressAndSetState = (addressToGeocode) => {
-    //     const geocoder = new this.props.google.maps.Geocoder()
-    //     geocoder.geocode({address: addressToGeocode}, (response, status) => {
-    //         if (status === 'OK') {
-    //             // console.log('Geocoder lat = ', response[0].geometry.bounds.na.l)
-    //             // console.log('Geocoder lng = ', response[0].geometry.bounds.ga.l)
-    //             this.setState(prevState => {
-    //                 return { latlngs: [...prevState.latlngs, {lat: response[0].geometry.bounds.na.l, lng: response[0].geometry.bounds.ga.l}]
-    //                 }
-    //             })
-    //         } else {
-    //             alert('Geocode was not successful for the following reason: ' + status);
-    //         }
-    //     })
+    geocodeAddressAndSetStateOfDonor = (match_idx, location_idx) => {
+        console.log('IN GECODE DONOR AND STATE ADDRESS RETURNED IS = ', this.state.matchesWithObjs[match_idx].donor_user_item.user.locations[location_idx].address)
+        // const geocoder = new this.props.google.maps.Geocoder()
+        // geocoder.geocode({address: }, (response, status) => {
+        //     if (status === 'OK') {
+        //         // console.log('Geocoder lat = ', response[0].geometry.bounds.na.l)
+        //         // console.log('Geocoder lng = ', response[0].geometry.bounds.ga.l)
+        //         this.setState(prevState => {
+        //             return { matchesWithObjs: [...prevState.latlngs, {lat: response[0].geometry.bounds.na.l, lng: response[0].geometry.bounds.ga.l}]
+        //             }
+        //         })
+        //     } else {
+        //         alert('Geocode was not successful for the following reason: ' + status);
+        //     }
+        // })
         
-    // }
+    }
+    geocodeAddressAndSetStateOfDriver= (match_idx, location_idx) => {
+        console.log('IN GECODE DRIVER AND STATE ADDRESS RETURNED IS = ', this.state.matchesWithObjs[match_idx].driver.locations[location_idx].address)
+        const geocoder = new this.props.google.maps.Geocoder()
+        geocoder.geocode({address: this.state.matchesWithObjs[match_idx].driver.locations[location_idx].address}, (response, status) => {
+            if (status === 'OK') {
+                console.log('Geocoder lat = ', response[0].geometry.bounds.na.l)
+                console.log('Geocoder lng = ', response[0].geometry.bounds.ga.l)
+                this.setState(prevState => ({
+                    matchesWithObjs: prevState.matchesWithObjs.map(
+                        (el,idx) => idx === match_idx? { ...el, driverLatLng: {lat: response[0].geometry.bounds.na.l, lng: response[0].geometry.bounds.ga.l}}: el
+                    )
+                }), () => console.log('state.matchesWithObjs = ', this.state.matchesWithObjs))
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        })
+    }
+    geocodeAddressAndSetStateOfFoodBank = (match_idx, location_idx) => {
+        console.log('IN GECODE FOOD BANK AND STATE ADDRESS RETURNED IS = ', this.state.matchesWithObjs[match_idx].foodBank.locations[location_idx].address)
+    }
     render() {
         console.log('Matches props = ', this.props)
         return (
