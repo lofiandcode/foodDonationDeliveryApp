@@ -3,31 +3,43 @@ import DonationCard from '../components/DonationCard'
 import DonationForm from '../components/DonationsForm'
 
 const DonationsContainer = (props) => {
-    let displayDonations;
-    if (props.user) {
-        if (props.user.items) {
-            if (props.user.items.length > 0) {
-                displayDonations = props.user.items.map((item, idx) => <DonationCard key={idx} item={item}/>)
-                // console.log("SKFAIDFHLAISEHFLAISEHF ", displayDonations)
-
-                return (
-                    <div>
+    const displayDonationsForm = () => {
+        if (props.user.role !== 'driver') {
+            return <div>
                         <h4>Donations:</h4>
                         <DonationForm handleDonationChange={props.handleDonationChange} newDonation={props.newDonation} handleDonationSubmit={props.handleDonationSubmit}/>
-                        <ul>
-                            {displayDonations}
-                        </ul>
                     </div>
-                );
+        } else {
+            return null
+        }
+    }
+
+
+    const displayDonations = () => {
+        if (props.user) {
+            if (props.user.items) {
+                if (props.user.items.length > 0) {
+                    return props.user.items.map((item, idx) => <DonationCard key={idx} item={item}/>)
+                    // console.log("SKFAIDFHLAISEHFLAISEHF ", displayDonations)
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }
         } else {
-            return null;
+            return null
         }
-    } else {
-        return null
     }
+    return (
+        <div>
+            {displayDonationsForm()}
+            <ul>
+                {displayDonations()}
+            </ul>
+        </div>
+    );
+            
 };
 
 export default DonationsContainer
