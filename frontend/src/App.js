@@ -185,29 +185,29 @@ class App extends Component {
   }
 
   getFoodBanksThatNeedDonation = (user_item) => {
-    console.log('In getFoodBanksThatNeedDonation user_item = ', user_item)
+    // console.log('In getFoodBanksThatNeedDonation user_item = ', user_item)
     const donation = user_item.item.name
-    console.log('donation = ', donation)
-    console.log('Users = ', this.state.users)
+    // console.log('donation = ', donation)
+    // console.log('Users = ', this.state.users)
     const foodBanks = this.getFoodBanks()
-    console.log('foodBanks = ', foodBanks)
+    // console.log('foodBanks = ', foodBanks)
     const donationNeededFoodBanks = foodBanks.filter(foodBank => {
       const matchedItems = foodBank.items.filter(item => item.name === donation)
       return matchedItems.length > 0; 
     })
-    console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
+    // console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
     const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address)
-    console.log('foodBankAddresses = ', foodBankAddresses)
+    // console.log('foodBankAddresses = ', foodBankAddresses)
     this.setState({donorUserItem: user_item, donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.saveFoodBankDistancesToDonor));
   }
   saveFoodBankDistancesToDonor = (distanceMatrix) => {
-    console.log('In sortFoodBanksByDistanceFromCurrentUser()')
-    console.log('**ATTENTION** this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
-    console.log('distanceMatrix = ', distanceMatrix);
+    // console.log('In sortFoodBanksByDistanceFromCurrentUser()')
+    // console.log('**ATTENTION** this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
+    // console.log('distanceMatrix = ', distanceMatrix);
     const distances = this.parseDistanceDataOneOrigin(distanceMatrix, 0)
-    console.log(distances)
+    // console.log(distances)
     const foodBankDistances = this.createUserDistancesObjects([...this.state.donationNeededFoodBanks], distances, 'distanceToDonor')
-    console.log('foodBankDistances',foodBankDistances)
+    // console.log('foodBankDistances',foodBankDistances)
     this.setState({foodBankDistancesToDonor: foodBankDistances},() => this.findDriversDistancesToDonor())
   }
   createUserDistancesObjects = (arrayOfUsers, arrayOfDistances, distanceTo) => {
@@ -245,24 +245,24 @@ class App extends Component {
     const drivers = this.getDrivers()
     // console.log('drivers = ', drivers)
     const driversLocations = drivers.map(driver => driver.locations[0].address)
-    console.log('driversLocations = ', driversLocations)
-    console.log('currentUserLOcation= ', this.state.currentUser.locations[0].address)
+    // console.log('driversLocations = ', driversLocations)
+    // console.log('currentUserLOcation= ', this.state.currentUser.locations[0].address)
     this.setState({drivers: drivers},() => this.callDistanceAPI(driversLocations, [this.state.currentUser.locations[0].address], this.saveDriversDistancesToDonor));
   }
   saveDriversDistancesToDonor = (distanceMatrix) => {
-    console.log('distanceMatrix = ', distanceMatrix)
+    // console.log('distanceMatrix = ', distanceMatrix)
     const distances = this.parseDistanceDataOneDestination(distanceMatrix, 0)
-    console.log('distances = ', distances)
-    console.log('drivers = ', this.state.drivers)
+    // console.log('distances = ', distances)
+    // console.log('drivers = ', this.state.drivers)
     const drivers = [...this.state.drivers]
     const driverDistancesToDonor = this.createUserDistancesObjects(drivers, distances, 'distanceToDonor')
-    console.log('driverDistancesToDonor = ', driverDistancesToDonor)
+    // console.log('driverDistancesToDonor = ', driverDistancesToDonor)
     this.setState({ driverDistancesToDonor }, () => this.setPossibleDrivers())
   }
   setPossibleDrivers = () => {
     const driverDistancesToDonor = [...this.state.driverDistancesToDonor]
     const possiblDrivers = driverDistancesToDonor.filter(distanceObj => distanceObj.distanceToDonor <= distanceObj.driver.locations[0].milesFrom)
-    console.log('possibleDrivers = ', possiblDrivers)
+    // console.log('possibleDrivers = ', possiblDrivers)
     this.setState({possiblDrivers}, () => this.findPossibleDriverDistancesToFoodBanks())
   }
   findPossibleDriverDistancesToFoodBanks = () => {
@@ -290,7 +290,7 @@ class App extends Component {
     // console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
     // const donationNeededFoodBanks = [...this.state.donationNeededFoodBanks];
     // console.log('foodBanks = ', donationNeededFoodBanks)
-    console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
+    // console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
     const distanceResultsObj = drivers.map((driverObj, idx)=> {
       const tempFoodBanks = [...this.state.donationNeededFoodBanks];
       tempDistances = this.parseDistanceDataOneOrigin(distanceMatrix, idx)
@@ -317,7 +317,7 @@ class App extends Component {
     // console.log("filterResult = ", filterResult)
 
     const matches = filterResult.filter(obj => obj.distancesToFoodBanks.length > 0)
-    console.log('****MATCHES**** = ', matches)
+    // console.log('****MATCHES**** = ', matches)
     this.setState({matches}, () => this.saveMatchesToDB())
 
     
@@ -333,7 +333,7 @@ class App extends Component {
     // console.log('distancesIdx1 = ', distancesIdx1)
   }
   saveMatchesToDB = () => {
-    console.log('this.state = ', this.state)
+    // console.log('this.state = ', this.state)
     this.state.matches.forEach((match, idx) => {
       match.distancesToFoodBanks.forEach(obj => {
         // console.log(`STARTING INNER forEACH ${idx}`)
@@ -370,49 +370,6 @@ class App extends Component {
     .then(() => this.getUserItems())
     // .catch(err => alert(err.message));
   }
-  // saveDriversDistancesToFoodBanks = (distanceMatrix) => {
-  //   console.log('IN saveDriversDistancesToFoodBanks')
-  //   console.log('distanceMatrix = ', distanceMatrix)
-  //   const driversDistancesToFoodBanksTemp = this.createDriversDistancesToFoodBanks()
-  //   const driversDistancesToFoodBanks = driversDistancesToFoodBanksTemp.map((obj, idx) => {
-  //     const distances = this.parseDistanceDataOneOrigin(distanceMatrix, idx);
-  //     console.log('IN saveDriversDistancesToFoodBanks map, distances = ', distances);
-  //     return this.setDriverDistancesToFoodBanks(obj.distancesToFoodBanks, distances);
-  //   })
-  //   console.log('driversDistancesToFoodBanks = ', driversDistancesToFoodBanks)
-  // }
-  // setDriverDistancesToFoodBanks = (distancesToFoodBanksArray, distances) => {
-  //   console.log('IN setDriverDistancesToFoodBanks')
-  //   console.log('distancesToFoodBanksArray = ', distancesToFoodBanksArray)
-  //   console.log('distances = ', distances)
-  //   const setDistancesToFoodBanks = distancesToFoodBanksArray.map((obj, idx) => {
-  //     console.log('in setDriverDistancesToFoodBanks')
-  //     console.log('distances[idx] =', distances[idx])
-  //     obj.distance = distances[idx];
-  //     console.log('set obj = ', obj)
-  //     return obj
-  //   })
-  //   console.log('**CONCERN** setDistancesToFoodBanks = ', setDistancesToFoodBanks)
-  //   return setDistancesToFoodBanks
-  // }
-  // createDriversDistancesToFoodBanks = () => {
-  //   const drivers = this.state.possiblDrivers.map(obj => obj.driver)
-  //   const foodBanks = this.state.donationNeededFoodBanks
-  //   const foodBankObjects = foodBanks.map(foodBankObj => {
-  //     const obj = {foodBank: foodBankObj, distance: 0.0}
-  //     return obj;
-  //   })
-  //   console.log('IN createDriversDistancesToFoodBanks')
-  //   console.log('drivers = ', drivers)
-  //   console.log('foodBanksObjects = ', foodBankObjects)
-  //   const driversDistancesToFoodBanks = drivers.map(driver => {
-  //     const obj = {driver: driver, distancesToFoodBanks: foodBankObjects}
-  //     return obj;
-  //   })
-  //   console.log("driversDistancesToFoodBanks = ", driversDistancesToFoodBanks)
-  //   return driversDistancesToFoodBanks
-  // }
-
 
   joinLocationAndCurrentUser = (location) => {
     // console.log('currentUser.id = ', this.state.currentUser.id)
@@ -435,43 +392,7 @@ class App extends Component {
     // .then(response => response.json())
 
 }
-  // clearForm = () => {
-  //     // console.log('In ClearForm user_item = ', user_item)
-  //     // console.log('clearForm users = ', this.state.users);
-  //     // this.setState({
-  //     //     testDriver: {
-  //     //     name: 'John Doe',
-  //     //     phoneNum: '(206) 555-5555'
-  //     //     },
-  //     //     testDonor: {
-  //     //     name: 'Icicle Seafoods',
-  //     //     address: "4019 21st Ave W, Seattle, WA 98199"
-  //     //     },
-  //     //     testFoodBank: {
-  //     //     name: 'Ballard Food Bank',
-  //     //     address: '5130 Leary Ave NW, Seattle, WA 98107'
-  //     //     },
-  //     //     testItem: {
-  //     //     name: this.state.newDonation
-  //     //     }
-  //     // },() =>  )
-  //     this.resetUsersAndDonation()
-      
-  // }
 
-  // handleFormChange = (event) => {
-  //   event.preventDefault();
-  //   event.persist();
-  //   // console.log(event.target.value)
-  //   // console.log(event.target.name)
-  //   this.setState({
-  //       currentUser: {
-  //           ...this.state.currentUser,
-  //           [event.target.name]: event.target.value
-  //       }
-  //   })
-  //   // , () => console.log(this.state.currentUser[event.target.name])
-  // }
   handleDonationChange = (event) => {
     event.preventDefault();
     event.persist();
@@ -553,7 +474,7 @@ class App extends Component {
 }
   handleDonationSubmit = (event) => {
     event.preventDefault();
-    console.log('About to POST newDonation')
+    // console.log('About to POST newDonation')
     fetch(`http://localhost:3000/api/v1/items`, {
         method: "POST",
         headers: {

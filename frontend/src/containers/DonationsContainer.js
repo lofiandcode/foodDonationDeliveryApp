@@ -3,6 +3,18 @@ import DonationCard from '../components/DonationCard'
 import DonationForm from '../components/DonationsForm'
 
 const DonationsContainer = (props) => {
+    const displayDonationsForm = () => {
+        if (props.user.role !== 'driver') {
+            return <div>
+                        <h4>Donations:</h4>
+                        <DonationForm handleDonationChange={props.handleDonationChange} newDonation={props.newDonation} handleDonationSubmit={props.handleDonationSubmit}/>
+                    </div>
+        } else {
+            return null
+        }
+    }
+
+
     const displayDonations = () => {
         if (props.user) {
             if (props.user.items) {
@@ -21,8 +33,7 @@ const DonationsContainer = (props) => {
     }
     return (
         <div>
-            <h4>Donations:</h4>
-            <DonationForm handleDonationChange={props.handleDonationChange} newDonation={props.newDonation} handleDonationSubmit={props.handleDonationSubmit}/>
+            {displayDonationsForm()}
             <ul>
                 {displayDonations()}
             </ul>
