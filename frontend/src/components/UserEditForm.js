@@ -19,13 +19,19 @@ class UserEditForm extends Component {
         super(props);
         this.state = {
           name: this.props.user.name,
-          username: '',
-          password: '',
-          role: '',
-          phoneNum: '',
-          about: ''
+          role: this.props.user.role,
+          phoneNum: this.props.user.phoneNum,
+          about: this.props.user.about
         }
     }
+    handleFormChange = (e) => {
+        e.persist();
+        // console.log('IN handleChange')
+        // const key = e.target.name;
+        this.setState({
+          [e.target.name]: e.target.value
+        }, () => console.log(`${e.target.name} = `, this.state[e.target.name]))
+      }
     render() {
         // console.log('UserEditForm props = ', this.props)
         if (this.props.user.name) {
@@ -37,29 +43,29 @@ class UserEditForm extends Component {
                     <input
                         type="text"
                         name='name'
-                        onChange={(e) => this.props.handleFormChange(e)}
+                        onChange={(e) => this.handleFormChange(e)}
                         value={this.state.name}
                     /><br/>
                     <label>Account Type:</label>
                     <input
                         type="text"
                         name='role'
-                        onChange={(e) => this.props.handleFormChange(e)}
-                        value={this.props.user.role}
+                        onChange={(e) => this.handleFormChange(e)}
+                        value={this.state.role}
                     /><br/>
                     <label>About:</label>
                     <input
                         type="text"
                         name='about'
-                        onChange={(e) => this.props.handleFormChange(e)}
-                        value={this.props.user.about}
+                        onChange={(e) => this.handleFormChange(e)}
+                        value={this.state.about}
                     /><br/>
                     <label>Phone Number:</label>
                     <input
                         type="text"
                         name='phoneNum'
-                        onChange={(e) => this.props.handleFormChange(e)}
-                        value={this.props.user.phoneNum}
+                        onChange={(e) => this.handleFormChange(e)}
+                        value={this.state.phoneNum}
                     /><br/>
                     <button type='submit' onSubmit={ () => this.handleSubmit()}>Submit</button>
                     </form>
