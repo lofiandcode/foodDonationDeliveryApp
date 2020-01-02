@@ -34,9 +34,9 @@ class UserEditForm extends Component {
           [e.target.name]: e.target.value
         }, () => console.log(`${e.target.name} = `, this.state[e.target.name]))
     }
-    handleSubmit = (e) => {
-        this.props.handleCreateAccountSubmit(e, this.state);
-        this.props.history.push('/profile/address')
+    handleSubmit = (e) => { 
+        this.props.handleUserEditFormSubmit(e, this.state);
+        this.props.history.push('/profile')
     }
     render() {
         // console.log('UserEditForm props = ', this.props)
@@ -99,39 +99,6 @@ class UserEditForm extends Component {
                     />
                     <Form.Field control={Button}>Submit</Form.Field>
                 </Form>
-                // <div>
-                //     <form>
-                //         <label>Name:</label>
-                //     <input
-                //         type="text"
-                //         name='name'
-                //         onChange={(e) => this.handleFormChange(e)}
-                //         value={this.state.name}
-                //     /><br/>
-                //     <label>Account Type:</label>
-                //     <input
-                //         type="text"
-                //         name='role'
-                //         onChange={(e) => this.handleFormChange(e)}
-                //         value={this.state.role}
-                //     /><br/>
-                //     <label>About:</label>
-                //     <input
-                //         type="text"
-                //         name='about'
-                //         onChange={(e) => this.handleFormChange(e)}
-                //         value={this.state.about}
-                //     /><br/>
-                //     <label>Phone Number:</label>
-                //     <input
-                //         type="text"
-                //         name='phoneNum'
-                //         onChange={(e) => this.handleFormChange(e)}
-                //         value={this.state.phoneNum}
-                //     /><br/>
-                //     <button type='submit' onSubmit={ () => this.handleSubmit()}>Submit</button>
-                //     </form>
-                // </div>
             )
         } else {
             // console.log('IN UserEditForm outer else')
