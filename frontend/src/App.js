@@ -453,7 +453,7 @@ class App extends Component {
 
 
   }
-  handleSubmit = (event) => {
+  handleUserEditFormSubmit = (event, userUpdate) => {
     event.preventDefault();
     fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
         method: "PATCH",
@@ -462,14 +462,16 @@ class App extends Component {
         "Accept": "application/json"
         },
         body: JSON.stringify({
-            name: this.state.currentUser.name,
-            role: this.state.currentUser.role,
-            phoneNum: this.state.currentUser.phoneNum,
-            about: this.state.currentUser.about
+            name: userUpdate.name,
+            role: userUpdate.role,
+            username: userUpdate.username,
+            password: userUpdate.password,
+            phoneNum: userUpdate.phoneNum,
+            about: userUpdate.about
         })
     })
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(data => this.setState({currentUser: data}, () => console.log(this.state.currentUser)))
     .catch(err => alert(err.message));
 }
   handleDonationSubmit = (event) => {
@@ -542,8 +544,7 @@ class App extends Component {
             render={() => 
               <UserEditView 
                 currentUser={this.state.currentUser} 
-                handleFormChange={this.handleFormChange} 
-                handleSubmit={this.handleSubmit}
+                handleUserEditFormSubmit={this.handleUserEditFormSubmit}
               />
             }
           />
