@@ -434,6 +434,7 @@ class App extends Component {
     // console.log('IN App handler newAddress = ', newAddress)
     // console.log("LocationName = ", locationName)
     // console.log("mileFrom = ", milesFrom)
+    this.setState({activeItem: 'home'})
     fetch('http://localhost:3000/api/v1/locations/', {
         method: "POST",
         headers: {
