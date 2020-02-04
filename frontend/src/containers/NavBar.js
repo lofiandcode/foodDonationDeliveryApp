@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom';
 
 export default class NavBar extends Component {
   
-  state = { activeItem: this.props.activeItem };
-  
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name }) => this.props.handleNavBarItemClick(name)
 
   render() {
-    const { activeItem } = this.state
+    const { activeItem } = this.props
 
     return (
       <div>

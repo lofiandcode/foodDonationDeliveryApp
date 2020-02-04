@@ -492,11 +492,15 @@ class App extends Component {
     .catch(err => alert(err.message));
   }
 
+  handleNavBarItemClick = name => this.setState({ activeItem: name })
+
   render() {
     return (
       <Fragment>
         <Router>
-          <NavBar activeItem={this.state.activeItem}/>
+          <NavBar handleNavBarItemClick={this.handleNavBarItemClick}
+            activeItem={this.state.activeItem}
+          />
           <Route
             exact path='/login'
             render={() => 
