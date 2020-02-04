@@ -24,6 +24,7 @@ class App extends Component {
         users: [],
         currentUser: {},
         newDonation: '',
+        activeItem: 'logout',
         loggedIn: false,
         loginError: false,
         testDriver: '',
@@ -434,27 +435,26 @@ class App extends Component {
     // console.log("LocationName = ", locationName)
     // console.log("mileFrom = ", milesFrom)
     fetch('http://localhost:3000/api/v1/locations/', {
-          method: "POST",
-          headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-          },
-          body: JSON.stringify({
-              name: locationName,
-              address: newAddress,
-              milesFrom: milesFrom
-          })
-      })
-      .then(response => response.json())
-      .then(data => this.joinLocationAndCurrentUser(data))
-      .catch(err => alert(err.message));
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            name: locationName,
+            address: newAddress,
+            milesFrom: milesFrom
+        })
+    })
+    .then(response => response.json())
+    .then(data => this.joinLocationAndCurrentUser(data))
+    .catch(err => alert(err.message));
 
-//
-
-
+    
   }
-  handleSubmit = (event) => {
+  handleUserEditFormSubmit = (event, userUpdate) => {
     event.preventDefault();
+    this.setState({activeItem: 'home'})
     fetch(`http://localhost:3000/api/v1/users/${this.state.currentUser.id}`, {
         method: "PATCH",
         headers: {
@@ -462,14 +462,16 @@ class App extends Component {
         "Accept": "application/json"
         },
         body: JSON.stringify({
-            name: this.state.currentUser.name,
-            role: this.state.currentUser.role,
-            phoneNum: this.state.currentUser.phoneNum,
-            about: this.state.currentUser.about
+            name: userUpdate.name,
+            role: userUpdate.role,
+            username: userUpdate.username,
+            password: userUpdate.password,
+            phoneNum: userUpdate.phoneNum,
+            about: userUpdate.about
         })
     })
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(data => this.setState({currentUser: data}, () => console.log(this.state.currentUser)))
     .catch(err => alert(err.message));
 }
   handleDonationSubmit = (event) => {
@@ -494,7 +496,7 @@ class App extends Component {
     return (
       <Fragment>
         <Router>
-          <NavBar />
+          <NavBar activeItem={this.state.activeItem}/>
           <Route
             exact path='/login'
             render={() => 
@@ -542,8 +544,7 @@ class App extends Component {
             render={() => 
               <UserEditView 
                 currentUser={this.state.currentUser} 
-                handleFormChange={this.handleFormChange} 
-                handleSubmit={this.handleSubmit}
+                handleUserEditFormSubmit={this.handleUserEditFormSubmit}
               />
             }
           />

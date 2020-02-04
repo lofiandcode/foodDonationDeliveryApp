@@ -34,6 +34,11 @@ class UserEditForm extends Component {
           [e.target.name]: e.target.value
         }, () => console.log(`${e.target.name} = `, this.state[e.target.name]))
     }
+    handleSelectChange = (e) => {
+        e.persist();
+        let newRole = e.target.innerText.toLowerCase();
+        this.setState({role: newRole},() => console.log(this.state))
+    }
     handleSubmit = (e) => { 
         this.props.handleUserEditFormSubmit(e, this.state);
         this.props.history.push('/profile')

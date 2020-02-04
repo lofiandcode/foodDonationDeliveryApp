@@ -9,8 +9,7 @@ class UserEditView extends Component {
             <div>
               <UserEditForm 
               user={this.props.currentUser} 
-              handleFormChange={this.props.handleFormChange} 
-              handleSubmit={this.props.handleSubmit}/>  
+              handleUserEditFormSubmit={this.props.handleUserEditFormSubmit}/>  
             </div>
         );
     }
