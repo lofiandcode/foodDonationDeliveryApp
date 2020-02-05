@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default class NavBar extends Component {
   
   handleItemClick = (e, { name }) => this.props.handleNavBarItemClick(name)
-
+  handleLogoutClick = (e, { name }) => this.props.handleNavBarLogoutClick(name)
   render() {
     const { activeItem } = this.props
 
@@ -37,9 +37,9 @@ export default class NavBar extends Component {
             <Menu.Item
               name='logout'
               active={activeItem === 'logout'}
-              onClick={this.handleItemClick}
+              onClick={this.handleLogoutClick}
               as={ Link }
-              to='/login'
+              to='/'
             />
           </Menu.Menu>
         </Menu>
