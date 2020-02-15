@@ -407,6 +407,7 @@ class App extends Component {
       // console.log("IN handleLoginSubmit")
       // console.log('Username/Password = ', loginData)
       this.setCurrentUser(loginData.username, loginData.password)
+      this.setState({activeItem: 'home'})
   }
   handleCreateAccountSubmit = (event, newUser) => {
       event.preventDefault();
@@ -434,6 +435,7 @@ class App extends Component {
     // console.log('IN App handler newAddress = ', newAddress)
     // console.log("LocationName = ", locationName)
     // console.log("mileFrom = ", milesFrom)
+    this.setState({activeItem: 'home'})
     fetch('http://localhost:3000/api/v1/locations/', {
         method: "POST",
         headers: {
@@ -449,8 +451,6 @@ class App extends Component {
     .then(response => response.json())
     .then(data => this.joinLocationAndCurrentUser(data))
     .catch(err => alert(err.message));
-
-    
   }
   handleUserEditFormSubmit = (event, userUpdate) => {
     event.preventDefault();
@@ -492,13 +492,15 @@ class App extends Component {
     .catch(err => alert(err.message));
   }
 
+  handleNavBarItemClick = name => this.setState({ activeItem: name })
+  handleNavBarLogoutClick = name => this.setState({activeItem: name, currentUser: {}, loggedIn: false, loginError: false})
+
   render() {
     return (
       <Fragment>
         <Router>
-          <NavBar activeItem={this.state.activeItem}/>
-          <Route
-            exact path='/login'
+        <Route
+            exact path='/'
             render={() => 
               <LoginView 
                 handleLoginSubmit={this.handleLoginSubmit}
@@ -506,48 +508,55 @@ class App extends Component {
               />
             }
           />
-          <Route 
-            exact path='/profile/create'
-            render={() =>
-              <CreateProfileView handleCreateAccountSubmit={this.handleCreateAccountSubmit}/>
-            }
-          />
-          <Route 
-            exact path='/profile/address'
-            render={() =>
-              <AddressView handleAddressSubmit={this.handleAddressSubmit}/>
-            }
-          />
-          <Route
-            exact path='/profile'
-            render={() => 
-              <UserView 
-                currentUser={this.state.currentUser}
-                newDonation={this.state.newDonation}
-                handleDonationChange={this.handleDonationChange}
-                handleDonationSubmit={this.handleDonationSubmit}
-                testDriver={this.state.testDriver}
-                testDonor={this.state.testDonor}
-                testFoodBank={this.state.testFoodBank} 
-                testItem={this.state.testItem}
-              />
-            }
-          />
-          <Route
-            exact path="/matches"
-            render={() => 
-              <MatchesView />
-            }
-          />
-          <Route
-            exact path="/profile/edit"
-            render={() => 
-              <UserEditView 
-                currentUser={this.state.currentUser} 
-                handleUserEditFormSubmit={this.handleUserEditFormSubmit}
-              />
-            }
-          />
+          <Route path='/profile/'>
+            <NavBar 
+              handleNavBarItemClick={this.handleNavBarItemClick}
+              handleNavBarLogoutClick={this.handleNavBarLogoutClick}
+              activeItem={this.state.activeItem}
+            />
+            <Route 
+              exact path='create'
+              render={() =>
+                <CreateProfileView handleCreateAccountSubmit={this.handleCreateAccountSubmit}/>
+              }
+            />
+            <Route 
+              exact path='address'
+              render={() =>
+                <AddressView handleAddressSubmit={this.handleAddressSubmit}/>
+              }
+            />
+            <Route
+              exact path='/profile'
+              render={() => 
+                <UserView 
+                  currentUser={this.state.currentUser}
+                  newDonation={this.state.newDonation}
+                  handleDonationChange={this.handleDonationChange}
+                  handleDonationSubmit={this.handleDonationSubmit}
+                  testDriver={this.state.testDriver}
+                  testDonor={this.state.testDonor}
+                  testFoodBank={this.state.testFoodBank} 
+                  testItem={this.state.testItem}
+                />
+              }
+            />
+            <Route
+              exact path="/profile/matches"
+              render={() => 
+                <MatchesView />
+              }
+            />
+            <Route
+              exact path="/profile/edit"
+              render={() => 
+                <UserEditView 
+                  currentUser={this.state.currentUser} 
+                  handleUserEditFormSubmit={this.handleUserEditFormSubmit}
+                />
+              }
+            />
+          </Route>
         </Router>
       </Fragment>
     );

@@ -1,7 +1,7 @@
 import React from 'react'
 
 const About = (props) => {
-    if (props.user) {
+    if (props.user !== {}) {
         if (props.user.about) {
             return (
                 <div>
