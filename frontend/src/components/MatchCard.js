@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react'
 
 const MatchCard = (props) => {
-    console.log('MatchCard props = ',props)
     const foodBanksInfo = () => {
         return props.matches.map((match,idx) => {
             return <Fragment key={idx}>
@@ -15,7 +14,6 @@ const MatchCard = (props) => {
     if (props.matches.length !== 0 ) {
         return (
             <div>
-                {/* <h4>Donations Reading for Delivery</h4> */}
                 <p>
                     Donation:<br/>
                     {props.matches[0].donor_user_item.item.name}<br/><br/>
@@ -33,7 +31,6 @@ const MatchCard = (props) => {
             </div>
         );
     } else {
-        console.log('IN esle in match card')
         return null
     }
     

@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {GoogleApiWrapper} from 'google-maps-react';
-// import logo from './logo.svg';
 import './App.css';
 import UserView from './views/UserView';
 import NavBar from './containers/NavBar';
@@ -42,14 +41,6 @@ class App extends Component {
   }
   componentDidMount() {
       this.getUsers();
-      // console.log(REACT_APP_API_KEY)
-      // console.log('About to fetch')
-      // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1411+4th+Avenue,
-      // +Seattle,+WA+98101&key=${REACT_APP_API_KEY}`)
-      // .then(response => response.json())
-      // .then(data => console.log('Geocode API response = ', data))
-      // console.log("currentUser = ", this.state.currentUser)
-      // this.distanceAPITest();
   }
 
   distanceAPITest = () => {
@@ -57,22 +48,6 @@ class App extends Component {
   }
 
   callDistanceAPI = (origins, destinations, callback = () => console.log('')) => {
-    // console.log('users[0].location = ',this.state.users[0].locations[0].address)
-    // console.log('users[12].location.address = ',this.state.users[12].locations[0].address)
-    // console.log('users[18].location.address = ',this.state.users[18].locations[0].address)
-    // console.log('users[20].location.address = ',this.state.users[20].locations[0].address)
-    // console.log('users[21].location.address = ',this.state.users[21].locations[0].address)
-    // console.log('users[23].location.address = ',this.state.users[23].locations[0].address)
-    // const origin1 = this.state.users[0].locations[0].address;
-    // const destinationA = this.state.users[12].locations[0].address;
-    // const destinationB = this.state.users[18].locations[0].address;
-    // const destinationC = this.state.users[20].locations[0].address;
-    // const destinationD = this.state.users[21].locations[0].address;
-    // const destinationE = this.state.users[23].locations[0].address;
-    // const origins = [origin1];
-    // const destinations = [destinationA, destinationB, destinationC, destinationD, destinationE];
-    // const travelMode = 'DRIVING';
-    console.log('ABOUT TO CALL DISTANCE API')
     const service = new this.props.google.maps.DistanceMatrixService();
     service.getDistanceMatrix(
       {
@@ -85,8 +60,6 @@ class App extends Component {
       }, (response, status) => this.handleAPIResponse(response, status, callback));
   }
   handleAPIResponse = (response, status,callback = () => console.log('')) => {
-    console.log('Distance API response = ', response)
-    console.log('status = ', status)
     if (status === 'OK') {
       callback(response);
     } else {
@@ -127,88 +100,57 @@ class App extends Component {
     .catch(err=>console.log(err))
 }
   resetUsersAndDonation = (callback = ()=>console.log('')) => {
-    // console.log('IN resetUsers(), currentUser = ', this.state.currentUser)
-    // console.log('In resetUsers() and about to reset users')
       this.getUsers(callback);
       this.setState({newDonation: ''})
   }
   setCurrentUser = (username, password) => {
-    // console.log('IN setCurrentUser(), username = ', username)
-    // console.log('IN setCurrentUser(), password = ', password)
     const users = [...this.state.users]
     const loginUser = users.filter ( user => {
-        // console.log('***********************************')
-        // console.log('username = ', username)
-        // console.log('password = ', password)
-        // console.log('user.username = ', user.username)
-        // console.log('user.password = ', user.password)
-        // console.log("user.username === username && user.password === password is ", user.username === username && user.password === password)
-        // console.log('***********************************')
         if (user.username === username && user.password === password) {
-            // console.log('returned true')
             return true;
         } else {
-            // console.log('returned false')
             return false;
         }
     })
-    //  console.log('ABOUT TO SET CURRENTUSER IN STATE')
-  if (loginUser.length === 1) {
-    this.setState({currentUser: loginUser[0], loggedIn: true}, () => console.log('currentUser = ', this.state.currentUser))
-  } else {
-    this.setState({loginError: true, loggedIn: false, currentUser: {}}, () => console.log('LOGIN ERROR = ', this.state.loginError))
-    
-  }
-    //  , () => console.log('After setCurrentUser, currentUser = ', this.state.currentUser)
+    if (loginUser.length === 1) {
+      this.setState({currentUser: loginUser[0], loggedIn: true}, () => console.log('currentUser = ', this.state.currentUser))
+    } else {
+      this.setState({loginError: true, loggedIn: false, currentUser: {}}, () => console.log('LOGIN ERROR = ', this.state.loginError))
+      
+    }
   }
   joinItemAndCurrentUser = (item) => {
-      // console.log('item = ', item)
-      // console.log('item.id = ', item.id)
-      fetch('http://localhost:3000/api/v1/user_items', {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-          },
-          body: JSON.stringify({
-              user_item: {
-                  user_id: this.state.currentUser.id,
-                  item_id: item.id
-              }
-          })
-      })
-      .then(resp => resp.json())
-      .then(data => this.resetUsersAndDonation(() => this.getFoodBanksThatNeedDonation(data)))
-      .catch(err => alert(err.message));
-      // .then(response => response.json())
-      // .then(json => console.log('join post = ', json))
-
+    fetch('http://localhost:3000/api/v1/user_items', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            user_item: {
+                user_id: this.state.currentUser.id,
+                item_id: item.id
+            }
+        })
+    })
+    .then(resp => resp.json())
+    .then(data => this.resetUsersAndDonation(() => this.getFoodBanksThatNeedDonation(data)))
+    .catch(err => alert(err.message));
   }
 
   getFoodBanksThatNeedDonation = (user_item) => {
-    // console.log('In getFoodBanksThatNeedDonation user_item = ', user_item)
-    const donation = user_item.item.name
-    // console.log('donation = ', donation)
-    // console.log('Users = ', this.state.users)
-    const foodBanks = this.getFoodBanks()
-    // console.log('foodBanks = ', foodBanks)
+    const donation = user_item.item.name;
+    const foodBanks = this.getFoodBanks();
     const donationNeededFoodBanks = foodBanks.filter(foodBank => {
       const matchedItems = foodBank.items.filter(item => item.name === donation)
       return matchedItems.length > 0; 
-    })
-    // console.log('donationNeededFoodBanks = ', donationNeededFoodBanks)
-    const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address)
-    // console.log('foodBankAddresses = ', foodBankAddresses)
+    });
+    const foodBankAddresses = donationNeededFoodBanks.map(foodBank => foodBank.locations[0].address);
     this.setState({donorUserItem: user_item, donationNeededFoodBanks: donationNeededFoodBanks},this.callDistanceAPI([this.state.currentUser.locations[0].address], foodBankAddresses, this.saveFoodBankDistancesToDonor));
   }
   saveFoodBankDistancesToDonor = (distanceMatrix) => {
-    // console.log('In sortFoodBanksByDistanceFromCurrentUser()')
-    // console.log('**ATTENTION** this.state.donationNeededFoodBanks = ',this.state.donationNeededFoodBanks);
-    // console.log('distanceMatrix = ', distanceMatrix);
-    const distances = this.parseDistanceDataOneOrigin(distanceMatrix, 0)
-    // console.log(distances)
-    const foodBankDistances = this.createUserDistancesObjects([...this.state.donationNeededFoodBanks], distances, 'distanceToDonor')
-    // console.log('foodBankDistances',foodBankDistances)
+    const distances = this.parseDistanceDataOneOrigin(distanceMatrix, 0);
+    const foodBankDistances = this.createUserDistancesObjects([...this.state.donationNeededFoodBanks], distances, 'distanceToDonor');
     this.setState({foodBankDistancesToDonor: foodBankDistances},() => this.findDriversDistancesToDonor())
   }
   createUserDistancesObjects = (arrayOfUsers, arrayOfDistances, distanceTo) => {
@@ -243,55 +185,33 @@ class App extends Component {
     return drivers
   }
   findDriversDistancesToDonor = () => {
-    const drivers = this.getDrivers()
-    // console.log('drivers = ', drivers)
-    const driversLocations = drivers.map(driver => driver.locations[0].address)
-    // console.log('driversLocations = ', driversLocations)
-    // console.log('currentUserLOcation= ', this.state.currentUser.locations[0].address)
+    const drivers = this.getDrivers();
+    const driversLocations = drivers.map(driver => driver.locations[0].address);
     this.setState({drivers: drivers},() => this.callDistanceAPI(driversLocations, [this.state.currentUser.locations[0].address], this.saveDriversDistancesToDonor));
   }
   saveDriversDistancesToDonor = (distanceMatrix) => {
-    // console.log('distanceMatrix = ', distanceMatrix)
-    const distances = this.parseDistanceDataOneDestination(distanceMatrix, 0)
-    // console.log('distances = ', distances)
-    // console.log('drivers = ', this.state.drivers)
-    const drivers = [...this.state.drivers]
-    const driverDistancesToDonor = this.createUserDistancesObjects(drivers, distances, 'distanceToDonor')
-    // console.log('driverDistancesToDonor = ', driverDistancesToDonor)
-    this.setState({ driverDistancesToDonor }, () => this.setPossibleDrivers())
+    const distances = this.parseDistanceDataOneDestination(distanceMatrix, 0);
+    const drivers = [...this.state.drivers];
+    const driverDistancesToDonor = this.createUserDistancesObjects(drivers, distances, 'distanceToDonor');
+    this.setState({ driverDistancesToDonor }, () => this.setPossibleDrivers());
   }
   setPossibleDrivers = () => {
-    const driverDistancesToDonor = [...this.state.driverDistancesToDonor]
-    const possiblDrivers = driverDistancesToDonor.filter(distanceObj => distanceObj.distanceToDonor <= distanceObj.driver.locations[0].milesFrom)
-    // console.log('possibleDrivers = ', possiblDrivers)
-    this.setState({possiblDrivers}, () => this.findPossibleDriverDistancesToFoodBanks())
+    const driverDistancesToDonor = [...this.state.driverDistancesToDonor];
+    const possiblDrivers = driverDistancesToDonor.filter(distanceObj => distanceObj.distanceToDonor <= distanceObj.driver.locations[0].milesFrom);
+    this.setState({possiblDrivers}, () => this.findPossibleDriverDistancesToFoodBanks());
   }
   findPossibleDriverDistancesToFoodBanks = () => {
-    // console.log('In findPossibleDriverDistancesToFoodBanks')
     const drivers = [...this.state.possiblDrivers]
     const foodBanks = [...this.state.donationNeededFoodBanks]
-    // console.log('drivers = ', drivers)
-    // console.log('foodBanks = ', foodBanks)
-    // console.log('drivers = ', drivers)
     const driversLocations = drivers.map(obj => obj.driver.locations[0].address)
     const foodBanksLocations = foodBanks.map(foodBank => foodBank.locations[0].address)
-    // console.log('driversLocations = ', driversLocations)
-    // console.log('foodBanksLocations = ', foodBanksLocations)
     this.callDistanceAPI(driversLocations, foodBanksLocations, this.filterDriversDistancesToFoodBanks)
   }
   filterDriversDistancesToFoodBanks = (distanceMatrix) => {
-    // console.log('***ATTENTION*** IN filterDriversDistancesToFoodBanks')
-    // console.log('this.state = ', this.state )
-    // console.log('distanceMatrix = ', distanceMatrix)
     const possibleDrivers = [...this.state.possiblDrivers]
     const drivers = possibleDrivers.map(obj => obj.driver)
-    // console.log('possibleDrivers = ', drivers)
     let tempObj = {};
     let tempDistances = []
-    // console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
-    // const donationNeededFoodBanks = [...this.state.donationNeededFoodBanks];
-    // console.log('foodBanks = ', donationNeededFoodBanks)
-    // console.log('this.state.donationNeededFoodBanks = ', [...this.state.donationNeededFoodBanks])
     const distanceResultsObj = drivers.map((driverObj, idx)=> {
       const tempFoodBanks = [...this.state.donationNeededFoodBanks];
       tempDistances = this.parseDistanceDataOneOrigin(distanceMatrix, idx)
@@ -299,51 +219,22 @@ class App extends Component {
         return {foodBank: {...foodBank}, distanceToFoodBank: tempDistances[idx]}
       })
       tempObj = {driver: driverObj, distancesToFoodBanks: foodBankDistancesObjects}
-      // console.log('tempObj = ', tempObj)
       return tempObj
     })
-    // console.log('***ATTENTION*** distanceResultsObj = ',distanceResultsObj)
-
     const filterResult = distanceResultsObj.map(obj => {
-      // console.log('STARTING NEXT distanceResultsObj MAP') 
-      // console.log('obj = ', obj)
-      // console.log('obj.distancesToFoodBanks = ',obj.distancesToFoodBanks)
       const distances = [...obj.distancesToFoodBanks]
       const milesFrom = obj.driver.locations[0].milesFrom
       const temp = distances.filter(distanceObj => distanceObj.distanceToFoodBank <= milesFrom)
-      // console.log('FILTER RESULT temp = ', temp)
       const objResult = {...obj, distancesToFoodBanks: temp}
       return objResult
     })
-    // console.log("filterResult = ", filterResult)
-
     const matches = filterResult.filter(obj => obj.distancesToFoodBanks.length > 0)
-    // console.log('****MATCHES**** = ', matches)
     this.setState({matches}, () => this.saveMatchesToDB())
-
-    
-
-    //********************************* */
-    //Okay distanceResultObj has the right distances with the right driver.
-    //Now you just have to filter our the distances that aren't in drivers range
-    //********************************* */
-
-    // const distancesIdx0 = this.parseDistanceDataOneOrigin(distanceMatrix, 0)
-    // const distancesIdx1 = this.parseDistanceDataOneOrigin(distanceMatrix, 1)
-    // console.log('distancesIdx0 = ', distancesIdx0)
-    // console.log('distancesIdx1 = ', distancesIdx1)
   }
   saveMatchesToDB = () => {
-    // console.log('this.state = ', this.state)
     this.state.matches.forEach((match, idx) => {
       match.distancesToFoodBanks.forEach(obj => {
-        // console.log(`STARTING INNER forEACH ${idx}`)
-        // console.log('driver id = ', match.driver.id)
-        // console.log('donor_user_item id = ', this.state.donorUserItem.id)
-        // console.log('foodBank id = ', obj.foodBank.id)
-        // console.log('ABOUT TO POST TO MATCH TABLE')
         this.postToMatchTable(match.driver.id, this.state.donorUserItem.id, obj.foodBank.id, false, false)
-        // console.log(`ENDING INNER forEACH ${idx}`)
       })
     })
     this.getUserItems()
@@ -373,8 +264,6 @@ class App extends Component {
   }
 
   joinLocationAndCurrentUser = (location) => {
-    // console.log('currentUser.id = ', this.state.currentUser.id)
-    // console.log('location.id = ', location.id)
     fetch('http://localhost:3000/api/v1/user_locations', {
         method: "POST",
         headers: {
@@ -399,19 +288,15 @@ class App extends Component {
     event.persist();
     this.setState({
         newDonation: event.target.value
-    })
+    });
   }
-  // , () => console.log("newDonation = ", this.state.newDonation)
 
   handleLoginSubmit = (loginData) => {
-      // console.log("IN handleLoginSubmit")
-      // console.log('Username/Password = ', loginData)
-      this.setCurrentUser(loginData.username, loginData.password)
-      this.setState({activeItem: 'home'})
+      this.setCurrentUser(loginData.username, loginData.password);
+      this.setState({activeItem: 'home'});
   }
   handleCreateAccountSubmit = (event, newUser) => {
       event.preventDefault();
-      // console.log('newUser = ', newUser)
       fetch('http://localhost:3000/api/v1/users/', {
           method: "POST",
           headers: {
@@ -432,9 +317,6 @@ class App extends Component {
       .catch(err => alert(err.message));
   }
   handleAddressSubmit = (locationName, newAddress, milesFrom) => {
-    // console.log('IN App handler newAddress = ', newAddress)
-    // console.log("LocationName = ", locationName)
-    // console.log("mileFrom = ", milesFrom)
     this.setState({activeItem: 'home'})
     fetch('http://localhost:3000/api/v1/locations/', {
         method: "POST",
@@ -476,7 +358,6 @@ class App extends Component {
 }
   handleDonationSubmit = (event) => {
     event.preventDefault();
-    // console.log('About to POST newDonation')
     fetch(`http://localhost:3000/api/v1/items`, {
         method: "POST",
         headers: {

@@ -15,9 +15,6 @@ class LoginView extends Component {
     }
 
     handleLoginChange = (event) => {
-        // console.log('login change')
-        // console.log('event.target.value = ', event.target.value)
-        // console.log('event.target.name = ', event.target.name)
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -29,7 +26,6 @@ class LoginView extends Component {
 
     handleLoginSubmit = () => {
         this.props.handleLoginSubmit(this.state);
-        // this.props.history.push('/profile')
     }
 
     render() {

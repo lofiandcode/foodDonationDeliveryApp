@@ -25,21 +25,15 @@ class CreateAccountForm extends Component {
       phoneNum: '',
       about: ''
     }
-    // console.log("CreateAccountForm = ", this.props)
   }
   handleChange = (e) => {
     e.persist();
-    // console.log('IN handleChange')
-    // const key = e.target.name;
     this.setState({
       [e.target.name]: e.target.value
     })
   }
 
   handleSelectChange = (e) => {
-    // e.persist();
-    // console.log('IN handleChange')
-    // console.log('e = ',e);
     this.setState({
       role: e.target.innerText.toLowerCase()
     })
@@ -51,7 +45,6 @@ class CreateAccountForm extends Component {
   }
 
   render() {
-    console.log('create account state', this.state)
     return (
       <Form onSubmit={(e) => this.handleSubmit(e)}>
         <Form.Group widths='equal'>
@@ -99,30 +92,6 @@ class CreateAccountForm extends Component {
             placeholder='(xxx) xxx-xxxx'
           />
         </Form.Group>
-        {/* <Form.Group inline>
-          <label>Quantity</label>
-          <Form.Field
-            control={Radio}
-            label='One'
-            value='1'
-            checked={value === '1'}
-            onChange={this.handleChange}
-          />
-          <Form.Field
-            control={Radio}
-            label='Two'
-            value='2'
-            checked={value === '2'}
-            onChange={this.handleChange}
-          />
-          <Form.Field
-            control={Radio}
-            label='Three'
-            value='3'
-            checked={value === '3'}
-            onChange={this.handleChange}
-          />
-        </Form.Group> */}
         <Form.Field
           control={TextArea}
           name='about'
@@ -131,10 +100,6 @@ class CreateAccountForm extends Component {
           label='About'
           placeholder='Tell us more about you...'
         />
-        {/* <Form.Field
-          control={Checkbox}
-          label='I agree to the Terms and Conditions'
-        /> */}
         <Form.Field control={Button}>Submit</Form.Field>
       </Form>
     )

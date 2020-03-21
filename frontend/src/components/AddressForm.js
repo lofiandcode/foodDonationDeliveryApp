@@ -16,11 +16,9 @@ class AddressForm extends Component {
     }
     handleChange = (e) => {
         e.persist();
-        // console.log('IN handleChange')
-        // const key = e.target.name;
         this.setState({
           [e.target.name]: e.target.value
-        })
+        });
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -37,7 +35,7 @@ class AddressForm extends Component {
         state: '',
         zipcode: '',
         milesFrom: ''
-    }, () => console.log('AddressForm state = ', this.state));
+    });
     
     render() {
         return (
