@@ -28,11 +28,9 @@ class UserEditForm extends Component {
     }
     handleChange = (e) => {
         e.persist();
-        // console.log('IN handleChange')
-        // const key = e.target.name;
         this.setState({
           [e.target.name]: e.target.value
-        }, () => console.log(`${e.target.name} = `, this.state[e.target.name]))
+        });
     }
     handleSelectChange = (e) => {
         e.persist();
@@ -44,9 +42,7 @@ class UserEditForm extends Component {
         this.props.history.push('/profile')
     }
     render() {
-        // console.log('UserEditForm props = ', this.props)
         if (this.props.user.name) {
-            // console.log('IN UserEditForm about to render form')
             return (
                 <Form onSubmit={(e) => this.handleSubmit(e)}>
                     <Form.Group widths='equal'>
@@ -106,7 +102,6 @@ class UserEditForm extends Component {
                 </Form>
             )
         } else {
-            // console.log('IN UserEditForm outer else')
             return null;
         }
     }

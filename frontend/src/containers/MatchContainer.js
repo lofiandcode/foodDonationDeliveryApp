@@ -16,7 +16,6 @@ const MatchContainer = (props) => {
             </Modal>
         )
     } else {
-        // console.log('IN esle in match container')
         return null
     }
 }

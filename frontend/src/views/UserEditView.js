@@ -4,7 +4,6 @@ import UserEditForm from '../components/UserEditForm'
 class UserEditView extends Component {
 
     render() {
-        console.log('UserEditView props = ', this.props)
         return (
             <div>
               <UserEditForm 

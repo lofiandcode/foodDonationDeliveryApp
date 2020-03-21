@@ -20,7 +20,6 @@ const DonationsContainer = (props) => {
             if (props.user.items) {
                 if (props.user.items.length > 0) {
                     return props.user.items.map((item, idx) => <DonationCard key={idx} item={item}/>)
-                    // console.log("SKFAIDFHLAISEHFLAISEHF ", displayDonations)
                 } else {
                     return null;
                 }
